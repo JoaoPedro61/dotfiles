@@ -10,11 +10,6 @@ sudo apt-get install git-all
 sudo apt install pass
 ```
 
-## Make sure that you have installed the package "pass"
-```bash
-sudo apt install pass
-```
-
 ## Set the credential manager on git config
 ```bash
 git config --global credential.credentialStore gpg
