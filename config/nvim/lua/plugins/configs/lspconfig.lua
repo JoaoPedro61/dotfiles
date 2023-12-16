@@ -1,8 +1,25 @@
+
 dofile(vim.g.base46_cache .. "lsp")
 require "nvchad.lsp"
 
 local M = {}
 local utils = require "core.utils"
+local lspconfig = require "lspconfig"
+
+
+local HOME_PATH = os.getenv("HOME") or "";
+local NODE_VERSION = "v20.9.0";
+
+local handleNodeVersion = io.popen("node -v");
+
+if (handleNodeVersion ~= nil) then
+  NODE_VERSION = handleNodeVersion:read();
+  handleNodeVersion:close();
+end
+
+local GLOBAL_NODE_MODULES = HOME_PATH .. "/.nvm/versions/node/" .. NODE_VERSION .. "/lib/node_modules";
+
+
 
 -- export on_attach & capabilities for custom lspconfigs
 
@@ -41,7 +58,41 @@ M.capabilities.textDocument.completion.completionItem = {
   },
 }
 
-require("lspconfig").lua_ls.setup {
+------------------------------------------------------
+-- Base LSP that no need aditional configurations ----
+------------------------------------------------------
+
+local servers = {
+  "html",
+  "cssls",
+  "bashls",
+  "azure_pipelines_ls",
+  "cssmodules_ls",
+  "custom_elements_ls",
+  "denols",
+  "eslint",
+  "htmx",
+  "jsonls",
+  "rust_analyzer",
+  "tailwindcss",
+  "tsserver"
+}
+
+for _, lsp in ipairs(servers) do
+  lspconfig[lsp].setup {
+    on_attach = M.on_attach,
+    capabilities = M.capabilities,
+  }
+end
+
+
+------------------------------------------------------
+-- Put the more complex LSP here that need some ------
+-- aditional config ----------------------------------
+------------------------------------------------------
+
+
+lspconfig["lua_ls"].setup {
   on_attach = M.on_attach,
   capabilities = M.capabilities,
 
@@ -63,5 +114,25 @@ require("lspconfig").lua_ls.setup {
     },
   },
 }
+
+
+
+-- Angular configuration
+local CMD_ANGULAR = {
+  "ngserver",
+  "--stdio",
+  "--tsProbeLocations", GLOBAL_NODE_MODULES,
+  "--ngProbeLocations", GLOBAL_NODE_MODULES
+}
+
+lspconfig["angularls"].setup {
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
+  cmd = CMD_ANGULAR,
+  on_new_config = function(new_config)
+    new_config.cmd = CMD_ANGULAR
+  end,
+}
+
 
 return M

@@ -16,13 +16,34 @@ declare -A BASE_PACKAGES=(
   ["git-all"]="git"
   ["curl"]="curl",
   ["libfontconfig1-dev"]="libfontconfig1-dev",
-  ["wget"]="wget"
+  ["wget"]="wget",
+  ["ruby-full"]="gem",
 )
 
 # Base RCs files
 declare -a RCS_FILES=(
   "bashrc"
   "zshrc"
+)
+
+declare -a NPM_PACKAGES=(
+  "yarn"
+  "typescript"
+  "typescript-language-server"
+  "bash-language-server"
+  "azure-pipelines-language-server"
+  "azure-pipelines-language-service"
+  "vscode-langservers-extracted"
+  "custom-elements-languageserver"
+  "cssmodules-language-server"
+  "@tailwindcss/language-server"
+  "@angular/cli"
+  "@angular/language-service"
+  "@angular/language-server"
+)
+
+declare -a CARGO_PACKAGES=(
+  "htmx-lsp"
 )
 
 declare -a MIN_NVIM_VERSION=(0 9 4)
@@ -185,9 +206,54 @@ install_nvim_package ()
 # Install node basic packages
 install_node_packages ()
 {
-  npm i -g yarn @angular/cli @angular/language-service @angular/language-server typescript
+  if [ -f ~/.nvm/nvm.sh ]; then
+   source ~/.nvm/nvm.sh
+  fi
+
+  nvm install --lts
+  
+  for package_name in "${NPM_PACKAGES[@]}"
+  do
+    echo "[BASE]: Installing package '$package_name'..."
+    npm install -g $package_name -y
+  done
 }
 
+# Install alacritty package
+install_alacritty_package ()
+{
+  echo "[ALACRITTY]: Installing alacritty"
+  if [ $(exists_exec cargo) = true ]; then
+    cargo install alacritty
+
+    # Add desktop icon
+    if [ $(exists_exec alacritty) = true -a $(exists_exec git) = true ]; then
+      echo "[ALACRITTY]: Trying to add alacritty desktop icon..."
+      cd /tmp
+      git clone https://github.com/alacritty/alacritty.git
+      if [ -d /tmp/alacritty ]; then
+        cd /tmp/alacritty
+        sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+        sudo desktop-file-install extra/linux/Alacritty.desktop
+        sudo update-desktop-database
+      fi
+    fi
+  else
+    echo "[ALACRITTY]: No rust tools founded. Skipping..."
+  fi
+}
+
+install_cargo_packages ()
+{
+  echo "[CARGO]: Installing packages..."
+  if [ $(exists_exec cargo) = true ]; then
+    for package_name in "${CARGO_PACKAGES[@]}"
+    do
+      echo "[BASE]: Installing package '$package_name'..."
+      cargo install $package_name
+    done
+  fi
+}
 
 
 ##########################################################
@@ -282,7 +348,15 @@ execute_installers ()
   install_rust_package
   install_nvm_package
   install_nvim_package
+  
+  # Source files before continue instalations
+  if [ -f "$HOME/.bashrc" ]; then
+    source "$HOME/.bashrc" # This inject new packages installed on previews steps
+  fi
+
+  install_cargo_packages
   install_node_packages
+  install_alacritty_package
 }
 
 execute_configs ()
@@ -297,7 +371,6 @@ execute_all ()
   execute_installers
   execute_configs
 }
-
 
 if [ "$#" -lt 1 ]; then
   echo "Example:"
