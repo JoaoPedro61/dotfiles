@@ -68,8 +68,6 @@ local servers = {
   "bashls",
   "azure_pipelines_ls",
   "cssmodules_ls",
-  "custom_elements_ls",
-  "denols",
   "eslint",
   "htmx",
   "jsonls",

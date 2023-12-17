@@ -10,8 +10,6 @@ local options = {
     "codespell",
     "css-lsp",
     "cssmodules-language-server",
-    "custom-elements-languageserver",
-    "deno",
     "eslint-lsp",
     "html-lsp",
     "htmx-lsp",
