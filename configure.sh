@@ -44,6 +44,8 @@ declare -a NPM_PACKAGES=(
 
 declare -a CARGO_PACKAGES=(
   "htmx-lsp"
+  "fd-find"
+  "ripgrep"
 )
 
 declare -a MIN_NVIM_VERSION=(0 9 4)
