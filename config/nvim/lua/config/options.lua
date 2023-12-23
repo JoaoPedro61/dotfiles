@@ -5,11 +5,8 @@
 -- Defined lead key
 vim.g.mapleader = " "
 
--- Enable auto formats
+-- Enable auto format
 vim.g.autoFormat = true
-
--- Enable LazyVim auto format
-vim.g.autoformat = true
 
 vim.scriptencoding = "utf-8"
 
