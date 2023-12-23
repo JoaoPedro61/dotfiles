@@ -11,6 +11,8 @@ vim.g.autoFormat = true
 -- Enable LazyVim auto format
 vim.g.autoformat = true
 
+vim.scriptencoding = "utf-8"
+
 -- LazyVim root dir detection
 -- Each entry can be:
 -- * the name of a detector function like `lsp` or `cwd`
@@ -20,6 +22,9 @@ vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" }
 
 local opt = vim.opt
 
+opt.encoding = "utf-8"
+opt.fileencoding = "utf-8"
+opt.title = true
 opt.autowrite = true -- Enable auto write
 opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.completeopt = "menu,menuone,noselect"
@@ -63,6 +68,7 @@ opt.virtualedit = "block" -- Allow cursor to move where there is no text in visu
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
+opt.formatoptions:append({ "r" }) -- add asterisks in block comments
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
