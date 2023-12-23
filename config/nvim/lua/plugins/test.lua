@@ -1,7 +1,17 @@
 return {
-  { "nvim-neotest/neotest-plenary" },
   {
     "nvim-neotest/neotest",
-    opts = { adapters = { "neotest-plenary" } },
+    dependencies = {
+      "haydenmeade/neotest-jest",
+      "marilari88/neotest-vitest",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {
+      adapters = {
+        "neotest-jest",
+        "neotest-vitest",
+      },
+    },
   },
 }
