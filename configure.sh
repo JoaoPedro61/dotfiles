@@ -192,6 +192,8 @@ install_nvim_package ()
 
       echo "[NVIM]: moving the new files to $HOME/.nvim"
       mv $HOME/nvim-linux64 $HOME/.nvim
+      
+      rm -rf $HOME/nvim-linux64.tar.gz
     else
       echo "[NVIM]: Can't find $HOME/nvim-linux64.tar.gz"
       echo "[NVIM]: Failed to download nvim-linux64.tar.gz" 
@@ -262,30 +264,8 @@ install_cargo_packages ()
 ### Configurations functions #############################
 ##########################################################
 
-# Apply wallpaper folder
-apply_wallpapers_config ()
-{
-  echo "[WALLPAPERS]: Checking wallpapers config..." 
-
-  proceed_with_copy ()
-  {
-    echo "[WALLPAPERS]: Moving new files to $HOME/wallpapers"
-    cp -r $CDIR/wallpapers $HOME/wallpapers
-  }
-  
-  if ! [ -d $HOME/wallpapers ]; then
-    proceed_with_copy
-  else
-    if [ $(has_changes $HOME/wallpapers $CDIR/wallpapers) = true ]; then
-      echo "[WALLPAPERS]: Changes detected in wallpapers config..."
-      proceed_with_copy
-    else
-      echo "[WALLPAPERS]: No changes detected with the wallpapers. Skipping..."
-    fi
-  fi
-}
-
 # Apply rc's files config
+# !!! IMPORTANT !!!: Do not use symbolik link for rc's configs files.
 apply_rcs_files_config ()
 {
   echo "[RC]: Checking RC's files..."
@@ -319,23 +299,22 @@ apply_nvim_files_config ()
 {
   echo "[NVIM_CONFIG]: Checking nvim config..."
 
-  proceed_with_copy ()
+  proceed_with_symlink ()
   {
     echo "[NVIM_CONFIG]: Applying nvim config files..."
-    cp -r $CDIR/config/nvim $HOME/.config/nvim
+    ln -s $CDIR/config/nvim $HOME/.config/nvim
   }
 
   if ! [ -d $HOME/.config/nvim ]; then
-    proceed_with_copy
+    proceed_with_symlink
   else
-    if [ $(has_changes $CDIR/config/nvim $HOME/.config/nvim) = true ]; then
+    if [ -e $HOME/.config/nvim ]; then
       echo "[NVIM_CONFIG]: Removing old nvim config files..."
       rm -rf $HOME/.config/nvim
-
-      proceed_with_copy
+      proceed_with_symlink
     else
       echo "[NVIM_CONFIG]: No changes detected for NVIM config. Skipping..."
-    fi 
+    fi
   fi
 }
 
@@ -363,16 +342,11 @@ execute_installers ()
 
 execute_configs ()
 {
-  apply_wallpapers_config
   apply_rcs_files_config
   apply_nvim_files_config
 }
 
-execute_all ()
-{
-  execute_installers
-  execute_configs
-}
+
 
 if [ "$#" -lt 1 ]; then
   echo "Example:"
@@ -385,7 +359,8 @@ if [ "$#" -lt 1 ]; then
 fi
 
 if [ $1 = "all" ]; then
-  execute_all
+  execute_installers
+  execute_configs
 fi
 
 if [ $1 = "packages" ]; then
