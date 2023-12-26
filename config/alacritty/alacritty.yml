@@ -1,0 +1,14 @@
+window:
+  opacity: .4
+  dynamic_title: true
+  decorations: full
+  dynamic_padding: false
+  padding:
+    x: 0
+    y: 0
+
+font:
+  builtin_box_drawing: false
+  normal:
+    family: MesloLGS Nerd Font
+    size: 14
