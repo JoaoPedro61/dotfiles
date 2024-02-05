@@ -1,0 +1,38 @@
+[window]
+opacity = 0.9
+dynamic_title = true
+decorations = "None"
+dynamic_padding = false
+blur = true
+
+[window.padding]
+x = 5
+y = 5
+
+[font]
+builtin_box_drawing = false
+
+[font.normal]
+family = "MesloLGS Nerd Font"
+
+[cursor.style]
+shape = "Block"
+blinking = "Always"
+
+[mouse]
+hide_when_typing = true
+
+[keyboard]
+bindings = [
+  { key = "Q", mods = "Control|Shift", action = "Quit" },
+  { key = "N", mods = "Control|Shift", action = "SpawnNewInstance" },
+  { key = "P", mods = "Control|Shift", chars = "cd $HOME/Projects/" },
+  { key = "H", mods = "Control|Shift", chars = "cd $HOME/" },
+  { key = "G", mods = "Control|Shift", chars = "cd $HOME/Projects/github.com/" },
+  { key = "I", mods = "Control|Shift", chars = "nvim $HOME/AppData/Roaming/alacritty" },
+]
+
+[colors]
+primary = { background = "#222324", foreground = "#BABABA" }
+normal = { black = "#000000", red = "#E8341C", green = "#68C256", yellow = "#F2D42C", blue = "#1C98E8", magenta = "#8E69C9", cyan = "#1C98E8", white = "#BABABA" }
+bright = { black = "#666666", red = "#E05A4F", green = "#77B869", yellow = "#EFD64B", blue = "#387CD3", magenta = "#957BBE", cyan = "#3D97E2", white = "#BABABA" }
