@@ -1,0 +1,617 @@
+#!/usr/bin/env bash
+
+is_wsl=0
+
+temp_dir=/tmp
+log_file=$temp_dir/dotfiles.log
+script_dir="$(dirname "$(realpath "$0")")"
+
+if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+	is_wsl=1;
+fi
+
+touch $log_file
+
+function log(){
+	echo $@ 2>&1 | tee -a $log_file
+}
+
+function setup_syslinks() {
+	log "Setup syslinks:"
+
+	error_message="Failed to setup Syslinks, see log file to more info: $log_file"
+
+	log "Check $HOME/.config"
+	if [ ! -d $HOME/.config ]; then
+		log "$HOME/.config not existis, trying to create..."
+
+		2>>$log_file 1>&2 mkdir $HOME/.config
+			
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			log "Create $HOME/.config successfully"
+		fi
+	fi
+
+	log "Check $HOME/.fonts"
+	if [ ! -d $HOME/.fonts ]; then
+		log "$HOME/.fonts not existis, trying to create..."
+
+		2>>$log_file 1>&2 mkdir $HOME/.fonts
+			
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			log "Create $HOME/.fonts successfully"
+		fi
+	fi
+
+	log "Check if is necessary remove old syslinks"
+	if [ -d $HOME/.config/nvim ]; then 
+		log "Removing old $HOME/.config/nvim"
+
+		2>>$log_file 1>&2 rm -rf $HOME/.config/nvim
+			
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			log "Remove $HOME/.config/nvim successfully"
+		fi
+	fi
+
+	if [ -d $HOME/.config/alacritty ]; then 
+		log "Removing old $HOME/.config/alacritty"
+
+		2>>$log_file 1>&2 rm -rf $HOME/.config/alacritty
+			
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			log "Remove $HOME/.config/alacritty successfully"
+		fi
+	fi
+
+	if [ -d $HOME/.fonts/MesloLGS ]; then 
+		log "Removing old $HOME/.fonts/MesloLGS"
+
+		2>>$log_file 1>&2 rm -rf $HOME/.fonts/MesloLGS
+			
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			log "Remove $HOME/.fonts/MesloLGS successfully"
+		fi
+	fi
+
+	if [ -f $HOME/.default-gems ]; then 
+		log "Removing old $HOME/.default-gems"
+
+		2>>$log_file 1>&2 rm -rf $HOME/.default-gems
+			
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			log "Remove $HOME/.default-gems successfully"
+		fi
+	fi
+
+	if [ -f $HOME/.default-perl-modules ]; then 
+		log "Removing old $HOME/.default-perl-modules"
+
+		2>>$log_file 1>&2 rm -rf $HOME/.default-perl-modules
+			
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			log "Remove $HOME/.default-perl-modules successfully"
+		fi
+	fi
+
+	log "Create syslink $script_dir/.default-perl-modules $HOME/.default-perl-modules"
+
+	2>>$log_file 1>&2 ln -s $script_dir/.default-perl-modules $HOME/.default-perl-modules
+		
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "Create syslink $HOME/.default-perl-modules successfully"
+	fi
+
+	log "Create syslink $script_dir/.default-gems $HOME/.default-gems"
+
+	2>>$log_file 1>&2 ln -s $script_dir/.default-gems $HOME/.default-gems
+		
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "Create syslink $HOME/.default-gems successfully"
+	fi
+
+	log "Create syslink $script_dir/.fonts/MesloLGS $HOME/.fonts/MesloLGS"
+
+	2>>$log_file 1>&2 ln -s $script_dir/.fonts/MesloLGS $HOME/.fonts/MesloLGS
+		
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "Create syslink $HOME/.fonts/MesloLGS successfully"
+	fi
+
+	log "Create syslink $script_dir/.config/nvim $HOME/.config/nvim"
+
+	2>>$log_file 1>&2 ln -s $script_dir/.config/nvim $HOME/.config/nvim
+		
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "Create syslink $HOME/.config/nvim successfully"
+	fi
+
+	log "Create syslink $script_dir/.config/alacritty $HOME/.config/alacritty"
+
+	2>>$log_file 1>&2 ln -s $script_dir/.config/alacritty $HOME/.config/alacritty
+		
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "Create syslink $HOME/.config/alacritty successfully"
+	fi
+}
+
+function install_common_dependencies() {
+	log "Install common dependencies:"
+
+	2>>$log_file 1>&2 \
+	sudo apt install -y build-essential \
+		curl \
+		wget \
+		git \
+		python3 \
+		python3-pip \
+		python3-dev \
+		python3-neovim \
+		libreadline-dev \
+		unzip \
+		cmake \
+		g++ \
+		pkg-config \
+		libfreetype6-dev \
+		libfontconfig1-dev \
+		libxcb-xfixes0-dev \
+		libxkbcommon-dev \
+		scdoc \
+		htop \
+		coreutils \
+		fd-find \
+		ripgrep \
+		zsh \
+		libz-dev \
+		libssl-dev \
+		libffi-dev \
+		libyaml-dev
+	
+	if [ ! $? -eq 0 ]; then
+		log "Failed to install common dependencies, see log file to more info: $log_file"
+		exit 1
+	else
+		log "Common dependencies successfully installed"
+	fi
+}
+
+function install_rust_lang() {
+	log "Install RustLang:"
+
+	2>>$log_file 1>&2 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+	
+	if [ ! $? -eq 0 ]; then
+		log "Failed to install RustLang, see log file to more info: $log_file"
+		exit 1
+	else
+		log "RustLang successfully installed"
+	fi
+}
+
+function install_lua_lang() {
+	log "Install LuaLang:"
+
+	version="lua-5.4.7"
+	url="https://www.lua.org/ftp/${version}.tar.gz"
+	error_message="Failed to install LuaLang, see log file to more info: $log_file"
+
+	if [ ! -d "$temp_dir/$version" ]; then
+		2>>$log_file 1>&2 $(curl --proto '=https' --tlsv1.2 -sSf -L -R $url | tar zx -C $temp_dir)
+	else
+		log "Skip download lua tar file: $url"
+	fi
+	
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		cd $temp_dir/$version
+
+		2>>$log_file 1>&2 make all test
+
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			2>>$log_file 1>&2 sudo make install
+			
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "LuaLang successfully installed"
+			fi
+		fi
+	fi
+}
+
+function install_luarocks() {
+	log "Install LuaRocks:"
+
+	version="luarocks-3.11.1"
+	url="https://luarocks.github.io/luarocks/releases/$version.tar.gz"
+	error_message="Failed to install LuaRocks, see log file to more info: $log_file"
+
+	if [ ! -d "$temp_dir/$version" ]; then
+		2>>$log_file 1>&2 $(curl --proto '=https' --tlsv1.2 -sSf -L -R $url | tar zx -C $temp_dir)
+	else
+		log "Skip download luarocks tar file: $url"
+	fi
+	
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		cd $temp_dir/$version
+
+		2>>$log_file 1>&2 ./configure --with-lua-include=/usr/local/include
+
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			2>>$log_file 1>&2 make
+			2>>$log_file 1>&2 sudo make install
+			
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "LuaRocks successfully installed"
+			fi
+		fi
+	fi
+}
+
+function install_asdf_plugin() {
+	log "Install asdf plugin $1:"
+
+	error_message="Failed to install asdf plugin $1, see log file to more info: $log_file"
+
+	2>>$log_file 1>&2 asdf plugin add $1 $2
+	
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "asdf successfully plugin added: $1"
+
+		2>>$log_file 1>&2 asdf install $1 $3
+
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			2>>$log_file 1>&2 asdf global $1 $3
+			log "asdf successfully plugin installed: $1"
+		fi
+	fi
+}
+
+function install_asdf() {
+	log "Install asdf:"
+
+	version="v0.14.1"
+	url="https://github.com/asdf-vm/asdf.git"
+	dest_path=$HOME/.asdf
+	error_message="Failed to install asdf, see log file to more info: $log_file"
+
+	if [ ! -d "$dest_path" ]; then
+		2>>$log_file 1>&2 $(git clone $url $dest_path --branch $version)
+	else
+		log "Skip download asdf git repo: $url - $version"
+	fi
+	
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		source "$dest_path/asdf.sh"
+		log "asdf successfully installed"
+
+		install_asdf_plugin nodejs https://github.com/asdf-vm/asdf-nodejs.git latest
+		install_asdf_plugin ruby https://github.com/asdf-vm/asdf-ruby.git latest
+
+		install_asdf_plugin golang https://github.com/asdf-community/asdf-golang.git latest
+		log "Trying to set golang env variables:"
+		2>>$log_file 1>&2 $(source $dest_path/plugins/golang/set-env.bash)
+
+		install_asdf_plugin elixir https://github.com/asdf-vm/asdf-elixir.git latest
+
+		install_asdf_plugin perl https://github.com/ouest/asdf-perl.git latest
+	fi
+}
+
+function install_neovim() {
+	log "Install NeoVim:"
+
+	version="v0.10.2"
+	file_name=nvim-linux64
+	dest_path=$HOME/.nvim
+	url="https://github.com/neovim/neovim/releases/download/$version/$file_name.tar.gz"
+	error_message="Failed to install NeoVim, see log file to more info: $log_file"
+
+	2>>$log_file 1>&2 gem install neovim
+
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "NeoVim ruby package successfully installed"
+	fi
+
+	2>>$log_file 1>&2 gem environment
+
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "NeoVim ruby package successfully setted as global bin"
+	fi
+
+	2>>$log_file 1>&2 npm i -g neovim
+
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		log "NeoVim Node.JS package successfully installed"
+	fi
+
+	if [ ! -d "$temp_dir/$file_name" ]; then
+		2>>$log_file 1>&2 $(curl --proto '=https' --tlsv1.2 -sSf -L -R $url | tar zx -C $temp_dir)
+	else
+		log "Skip download NeoVim git repo: $url"
+	fi
+	
+	if [ ! $? -eq 0 ]; then
+		log $error_message
+		exit 1
+	else
+		if [ -d $dest_path ]; then
+			2>>$log_file 1>&2 rm -rf $dest_path
+		fi
+
+		2>>$log_file 1>&2 mv $temp_dir/$file_name $dest_path
+
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			export PATH="$PATH:$dest_path/bin"
+			log "NeoVim successfully installed"
+		fi
+	fi
+}
+
+function install_alacritty() {
+	if [ $is_wsl -eq 1 ]; then
+		log "Skip Alacritty installation because is running in WSL"
+	else 
+		log "Install Alacritty:"
+
+		url="https://github.com/alacritty/alacritty.git"
+		error_message="Failed to install Alacritty, see log file to more info: $log_file"
+
+		if [ ! -d "$temp_dir/alacritty" ]; then
+			2>>$log_file 1>&2 git clone https://github.com/alacritty/alacritty.git $temp_dir/alacritty
+		else
+			log "Skip download Alacritty git repo: $url"
+		fi
+		
+		if [ ! $? -eq 0 ]; then
+			log $error_message
+			exit 1
+		else
+			
+			cd $temp_dir/alacritty
+
+			2>>$log_file 1>&2 cargo build --release
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty build with successfully"
+			fi
+
+			2>>$log_file 1>&2 sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty successfully generate application infos"
+			fi
+
+			if [ -f /usr/local/bin/alacritty ]; then
+				log "Alacritty removing old binary"
+				2>>$log_file 1>&2 sudo rm /usr/local/bin/alacritty
+
+				if [ ! $? -eq 0 ]; then
+					log $error_message
+					exit 1
+				else
+					log "Alacritty old binary removed with success"
+				fi
+			fi
+
+			log "Alacritty create new binary"
+
+			2>>$log_file 1>&2 sudo cp target/release/alacritty /usr/local/bin
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty new binary moved to /usr/local/bin"
+			fi
+
+			if [ -f /usr/share/pixmaps/Alacritty.svg ]; then
+				log "Alacritty removing old application icon"
+				2>>$log_file 1>&2 sudo rm /usr/share/pixmaps/Alacritty.svg
+
+				if [ ! $? -eq 0 ]; then
+					log $error_message
+					exit 1
+				else
+					log "Alacritty old icon removed with success"
+				fi
+			fi
+
+			log "Alacritty set a new icon application"
+
+			2>>$log_file 1>&2 sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty new icon moved to /usr/share/pixmaps/Alacritty.svg"
+			fi
+
+			log "Alacritty install desktop application icon"
+
+			2>>$log_file 1>&2 sudo desktop-file-install extra/linux/Alacritty.desktop
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty new icon moved to /usr/share/pixmaps/Alacritty.svg"
+			fi
+			
+			
+			log "Alacritty update desktop database"
+
+			2>>$log_file 1>&2 sudo update-desktop-database
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty desktop updated successfully"
+			fi
+			
+			log "Ignore manunal installation!"
+			
+
+			
+			if [ ! -d $HOME/.zsh_functions ]; then
+				log "Alacrity creating $HOME/.zsh_functions folder for ZSH"
+				
+				2>>$log_file 1>&2 mkdir $HOME/.zsh_functions
+
+				if [ ! $? -eq 0 ]; then
+					log $error_message
+					exit 1
+				else
+					log "Alacritty created $HOME/.zsh_functions for ZSH"
+				fi
+			fi
+
+			log "Alacritty move completions script for ZSH"
+
+			2>>$log_file 1>&2 cp extra/completions/_alacritty $HOME/.zsh_functions/_alacritty
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty moved completions scripts for ZSH"
+			fi
+
+			
+
+			if [ ! -d $HOME/.bash_completion ]; then
+				log "Alacrity creating $HOME/.bash_completion folder for BASH"
+				
+				2>>$log_file 1>&2 mkdir $HOME/.bash_completion
+
+				if [ ! $? -eq 0 ]; then
+					log $error_message
+					exit 1
+				else
+					log "Alacritty created $HOME/.bash_completion for BASH"
+				fi
+			fi
+
+			log "Alacritty move completions script for BASH"
+
+			2>>$log_file 1>&2 cp extra/completions/alacritty.bash $HOME/.bash_completion/alacritty
+
+			if [ ! $? -eq 0 ]; then
+				log $error_message
+				exit 1
+			else
+				log "Alacritty moved completions scripts for BASH"
+			fi
+
+			log "Alacritty successfully installed"
+		fi
+	fi
+}
+
+function setup_zsh() {
+	log "Setup ZSH:"
+	if [ -f $(which zsh) ]; then
+		echo
+		log "Type your password to change default shell:"
+		2>>$log_file 1>&2 chsh -s $(which zsh)
+
+		if [ ! $? -eq 0 ]; then
+			log "Failed to setup ZSH, see log file to more info: $log_file"
+			exit 1
+		else
+			log "ZSH successfully configured"
+		fi
+	else
+		log "ZSH Shell not installed"
+	fi
+}
+
+setup_syslinks;
+install_common_dependencies;
+install_rust_lang;
+install_lua_lang;
+install_luarocks;
+install_asdf;
+install_neovim;
+install_alacritty;
+setup_zsh;

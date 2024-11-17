@@ -1,0 +1,9 @@
+[general]
+import = ["~/.config/alacritty/themes/solarized_osaka.toml"]
+
+[window]
+decorations = "None"
+option_as_alt = "OnlyLeft"
+
+[font]
+normal.family = "MesloLGS NF"
