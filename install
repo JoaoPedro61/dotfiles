@@ -43,7 +43,7 @@ function remove_bin_if_exists() {
     local path=$1
     if [ -e "$path" ]; then
         log "Removing: $path"
-        sudo rm -rf "$path" || { log "Failed to remove $path"; exit 1; }
+        sudo rm "$path" || { log "Failed to remove $path"; exit 1; }
         log "Removed: $path"
     fi
 }
@@ -183,10 +183,10 @@ function install_alacritty() {
 		remove_if_exists "$temp_dir/alacritty"
     git clone https://github.com/alacritty/alacritty.git "$temp_dir/alacritty" || { log "Failed to clone Alacritty repository"; exit 1; }
     cd "$temp_dir/alacritty" && cargo build --release || { log "Failed to build Alacritty"; exit 1; }
-		remove_bin_if_exists /usr/local/bin
+		remove_bin_if_exists /usr/local/bin/alacritty
 		sudo cp target/release/alacritty /usr/local/bin || { log "Failed to copy Alacritty binary"; exit 1; }
 		sudo tic -xe alacritty,alacritty-direct extra/alacritty.info || { log "Failed to create application desktop information"; exit 1; }
-		remove_if_exists /usr/share/pixmaps/Alacritty.svg
+		sudo rm /usr/share/pixmaps/Alacritty.svg
 		sudo cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg || { log "Failed to copy application desktop icon"; exit 1; }
 		sudo desktop-file-install extra/linux/Alacritty.desktop || { log "Failed to install application desktop entry"; exit 1; }
 		sudo update-desktop-database || { log "Failed to update desktop database"; exit 1; }
@@ -212,7 +212,7 @@ function setup_zsh() {
 
         # Change default shell to zsh
         echo "Please type your password to change the default shell:"
-        sudo chsh -s "$(which zsh)"
+        chsh -s "$(which zsh)"
 
         # Check if chsh command succeeded
         if [ $? -eq 0 ]; then
