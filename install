@@ -180,6 +180,7 @@ function install_alacritty() {
     log "Installing Alacritty:"
 		log "Source RustLang to use cargo command"
 		source $HOME/.cargo/env || { log "Failed to source cargo and rust toolchain"; exit 1; }
+		remove_if_exists "$temp_dir/alacritty"
     git clone https://github.com/alacritty/alacritty.git "$temp_dir/alacritty" || { log "Failed to clone Alacritty repository"; exit 1; }
     cd "$temp_dir/alacritty" && cargo build --release || { log "Failed to build Alacritty"; exit 1; }
 		remove_bin_if_exists /usr/local/bin
