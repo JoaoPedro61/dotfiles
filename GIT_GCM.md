@@ -73,6 +73,12 @@ Next, install the downloaded `.deb` package:
 sudo dpkg -i gcm-linux_amd64.2.6.0.deb
 ```
 
+Next, run the configuration tool:
+
+```bash
+git-credential-manager configure
+```
+
 After installation, GCM will be configured to securely manage your credentials.
 
 ## Conclusion
