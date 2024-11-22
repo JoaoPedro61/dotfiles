@@ -1,0 +1,20 @@
+{
+  "name": "Full Dark",
+  "tab": {
+    "background": "#000000",
+    "iconStyle": "default",
+    "showCloseButton": "always",
+    "unfocusedBackground": "#000000"
+  },
+  "tabRow": {
+    "background": "#000000",
+    "unfocusedBackground": "#000000"
+  },
+  "window": {
+    "applicationTheme": "dark",
+    "experimental.rainbowFrame": false,
+    "frame": null,
+    "unfocusedFrame": null,
+    "useMica": false
+  }
+}

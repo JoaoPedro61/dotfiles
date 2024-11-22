@@ -71,7 +71,6 @@ require("lazy").setup({
   ui = {
     custom_keys = {
       ["<localleader>d"] = function(plugin)
-        print("ALJKHLDkashjdlKJAHS")
         dd(plugin)
       end,
     },
