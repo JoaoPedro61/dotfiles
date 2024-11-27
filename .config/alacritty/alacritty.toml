@@ -1,9 +1,9 @@
 [general]
-import = ["~/.config/alacritty/themes/solarized_osaka.toml"]
+import = ["~/.config/alacritty/themes/hyper.toml"]
 
 [window]
-decorations = "None"
 option_as_alt = "OnlyLeft"
+decorations_theme_variant = "Dark"
 
 [font]
 normal.family = "MesloLGS NF"
