@@ -1,16 +1,27 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = true,
     build = ":TSUpdate",
+    event = "BufRead",
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     opts_extend = { "ensure_installed" },
     opts = {
       ensure_installed = {
         "lua",
       },
-      highlight        = { enable = true },
-      indent           = { enable = true },
-      auto_install     = true,
+      auto_install = true,
+      autopairs = { enable = true },
+      indent = { enable = true },
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = true,
+      },
+      rainbow = {
+        enable = true,
+        extended_mode = false,
+        max_file_lines = nil,
+      },
     },
     init = function()
       require("nvim-treesitter.query_predicates")

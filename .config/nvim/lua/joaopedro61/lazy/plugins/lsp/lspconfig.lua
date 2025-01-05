@@ -49,6 +49,13 @@ return {
         --   require("rust-tools").setup({})
         -- end
       });
+
+
+      -- This is a temporary keymap
+      local keymap = vim.keymap
+      keymap.set("n", "<leader>cf", function()
+        vim.lsp.buf.format({ async = true })
+      end, { desc = "Formats the current buffer (LSP)", silent = true, noremap = true })
     end
   }
 }
