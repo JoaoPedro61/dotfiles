@@ -12,14 +12,24 @@ return {
           },
           automatic_installation = true
         }
-      }
+      },
+
+      -- Add support to completions.
+      -- See: ~/lua/joaopedro61/lazy/plugins/coding/completion.lua
+      "hrsh7th/cmp-nvim-lsp",
     },
 
     config = function()
+      local capabilities = vim.tbl_deep_extend("keep", require("cmp_nvim_lsp").default_capabilities(), {
+        -- Put your other defaults capabilities here
+      })
+
       require("mason-lspconfig").setup_handlers({
         -- This is a common handler to setup all lsp servers
         function(server_name)
-          require("lspconfig")[server_name].setup({})
+          require("lspconfig")[server_name].setup({
+            capabilities = capabilities,
+          })
         end,
 
         -- This is a setup lspconfig to the lua_ls server
@@ -40,7 +50,8 @@ return {
                   enable = false,
                 },
               },
-            }
+            },
+            capabilities = capabilities
           })
         end
 

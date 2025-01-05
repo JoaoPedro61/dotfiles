@@ -132,6 +132,15 @@ function install_lua_lang() {
   log "Lua installed"
 }
 
+# Install LuaRocks plugin
+function install_luarocks_plugin() {
+  log "Installing LuaRocks plugin $1"
+  luarocks install "$1" || {
+    log "Failed to install LuaRocks plugin $1"
+    exit 1
+  }
+}
+
 # Install LuaRocks
 function install_luarocks() {
   log "Installing LuaRocks:"
@@ -150,6 +159,8 @@ function install_luarocks() {
     exit 1
   }
   log "LuaRocks installed"
+
+  install_luarocks_plugin jsregexp
 }
 
 # Install asdf plugin
