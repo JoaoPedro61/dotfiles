@@ -11,14 +11,9 @@ keymap.set("n", "dw", 'vb"_d', vim.tbl_deep_extend("keep", opts, { desc = "Delet
 -- Select all
 keymap.set("n", "<C-a>", "gg<S-v>G", vim.tbl_deep_extend("keep", opts, { desc = "Select all" }))
 
--- Inlay hints
-keymap.set("n", "<leader>i", function()
-  require("joaopedro61.lsp").toggleInlayHints()
-end, vim.tbl_deep_extend("keep", opts, { desc = "Toggle Inlay Hints" }))
-
 -- New Buffer
-keymap.set("n", "<leader>bn", ":tabedit<Return>", vim.tbl_deep_extend("keep", opts, { desc = "Create a new tab (buffer)" }))
+keymap.set("n", "<leader>bw", ":tabedit<Return>",
+  vim.tbl_deep_extend("keep", opts, { desc = "Create a workspace (buffer)" }))
 
 -- Close current buffer
 keymap.set("n", "<leader>bd", ":bd<Return>", vim.tbl_deep_extend("keep", opts, { desc = "Close buffer" }))
-

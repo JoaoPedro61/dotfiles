@@ -1,4 +1,5 @@
 local has_words_before = require("joaopedro61.util.has_words_before")
+local ui = require("joaopedro61.ui")
 
 return {
   {
@@ -26,11 +27,6 @@ return {
       local luasnip = require("luasnip")
       local lspkind = require('lspkind')
 
-      local window_style = cmp.config.window.bordered({
-        border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-        winhighlight = "Normal:MENU,FloatBorder:BORDER,CursorLine:SELECT,Search:MENU",
-      });
-
       cmp.setup({
         enabled = function()
           -- disable completion in comments
@@ -54,8 +50,14 @@ return {
           end,
         },
         window = {
-          completion = window_style,
-          documentation = window_style,
+          completion = cmp.config.window.bordered({
+            border = ui.get_win_borders(),
+            winhighlight = ui.get_win_highlight(),
+          }),
+          documentation = cmp.config.window.bordered({
+            border = ui.get_win_borders(),
+            winhighlight = ui.get_win_highlight_docs(),
+          }),
         },
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
