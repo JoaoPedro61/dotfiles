@@ -1,6 +1,7 @@
 local platform = require("joaopedro61.util.platform")
 local split = require("joaopedro61.util.split")
 
+---@return boolean?
 local shell = function()
   if platform.is_windows() then
     return nil

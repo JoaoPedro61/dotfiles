@@ -1,15 +1,6 @@
 local M = {};
 
-function M.get_win_borders()
-  return { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
-end
-
-function M.get_win_highlight()
-  return "Normal:MENU,FloatBorder:BORDER,Search:None,CursorLine:PmenuSel"
-end
-
-function M.get_win_highlight_docs()
-  return "Normal:MENU,FloatBorder:BORDER,CursorLine:SELECT,Search:MENU"
-end
+M.window = require("joaopedro61.ui.window")
+M.icons = require("joaopedro61.ui.icons")
 
 return M;

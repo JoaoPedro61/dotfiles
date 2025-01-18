@@ -1,3 +1,6 @@
+---@param inputstr string
+---@param sep string
+---@return table
 local split = function(inputstr, sep)
   if sep == nil then
     sep = "%s"

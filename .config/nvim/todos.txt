@@ -1,0 +1,4 @@
+  - [ ] Implement LSP Code Actions
+  - [ ] Implement IncRename or alternative packages
+  - [ ] Implement GitSigns - lewis6991/gitsigns.nvim
+  - [ ] Implement Trouble - folke/trouble.nvim
