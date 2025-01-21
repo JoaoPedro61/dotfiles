@@ -29,6 +29,7 @@ return {
         { "<leader>c",     group = "code" },
         { "<leader>u",     group = "ui" },
         { "<leader><tab>", group = "tabpage" },
+        { "<leader>p",     group = "plugins" },
       });
     end
   }

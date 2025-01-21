@@ -62,6 +62,8 @@ return {
           }),
         },
         sources = cmp.config.sources({
+          { name = "lazydev" }, -- This is for lua dev only. See: ~/lua/joaopedro61/plugins/specs/lua-dev.lua
+
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = "nvim_lua" },

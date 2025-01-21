@@ -29,3 +29,10 @@ autocmd("Filetype", {
     vim.opt_local.spell = true
   end
 })
+
+-- This is a temporary autocmd
+autocmd("BufWritePre", {
+  callback = function()
+    vim.lsp.buf.format()
+  end
+})
