@@ -9,10 +9,7 @@ return {
     build = ":MasonUpdate",
     opts_extend = { "ensure_installed" },
     opts = {
-      ensure_installed = {
-        "stylua",
-        "shfmt",
-      },
+      ensure_installed = {},
       ui = {
         border = ui.window.get_win_borders(),
       },
@@ -42,18 +39,19 @@ return {
     end
   },
   {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = {
+      "williamboman/mason.nvim",
+    },
+    opts = {
+      automatic_installation = true
+    }
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
-      {
-        "williamboman/mason-lspconfig.nvim",
-        opts = {
-          ensure_installed = {
-            "lua_ls"
-          },
-          automatic_installation = true
-        }
-      },
+      "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
     },
     opts = {
@@ -122,6 +120,33 @@ return {
           },
         },
       },
+      --- You need add lsp clients names here, this clients will be automatic installed
+      --- via mason, or a custom handler in "setups" property.
+      ---
+      --- Example:
+      --- {
+      ---   servers = {
+      ---     angularls = {}
+      ---   }
+      --- }
+      ---
+      --- @type lspconfig.options
+      servers = {},
+      --- You can add a custom setup handler here
+      ---
+      --- Example:
+      --- {
+      ---   servers = {
+      ---     angularls = {},
+      ---   },
+      ---   setups = {
+      ---     angularls = function(server_name, server_opts)
+      ---       vim.print(server_opts)
+      ---     end
+      ---   }
+      --- }
+      --- @type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
+      setups = {},
     },
 
     config = function(_, opts)
@@ -141,7 +166,7 @@ return {
             if lsp.is_valid_buf(buffer, opts.codelens.exclude) then
               vim.lsp.codelens.refresh()
             end
-            vim.api.nvim_create_autocmd({ "bufenter", "cursorhold", "insertleave" }, {
+            vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
               buffer = buffer,
               callback = function()
                 if lsp.is_valid_buf(buffer, opts.codelens.exclude) then
@@ -152,39 +177,45 @@ return {
           end)
       end
 
+      local servers = opts.servers or {}
+      local setups = opts.setups or {}
       local capabilities = lsp.get_default_capabilities(opts.capabilities)
+      local servers_installer = lsp.Servers.get_servers_to_install(servers)
+      local multi_instance_control = {} --- @type string[]
 
-      require("mason-lspconfig").setup_handlers({
-        -- this is a common handler to setup all lsp servers
-        function(server_name)
-          require("lspconfig")[server_name].setup({
-            capabilities = vim.deepcopy(capabilities),
-          })
-        end,
-
-        -- this is a setup lspconfig to the lua_ls server
-        ["lua_ls"] = function()
-          require("lspconfig")["lua_ls"].setup({
-            settings = {
-              lua = {
-                runtime = {
-                  version = "luajit",
-                },
-                diagnostics = {
-                  globals = { "vim", "nvim_bufferline" },
-                },
-                workspace = {
-                  library = vim.api.nvim_get_runtime_file("", true),
-                },
-                telemetry = {
-                  enable = false,
-                },
-              },
-            },
-            capabilities = vim.deepcopy(capabilities),
-          })
+      local function setup(server)
+        local server_opts = vim.tbl_deep_extend("force", {
+          capabilities = vim.deepcopy(capabilities),
+        }, servers[server] or {})
+        if server_opts.enabled == false then
+          return
         end
-      });
+
+        if setups[server] then
+          if setups[server](server, server_opts) then
+            return
+          end
+        elseif setups["*"] then
+          if setups["*"](server, server_opts) then
+            return
+          end
+        end
+        if not vim.tbl_contains(multi_instance_control, server) then
+          multi_instance_control[#multi_instance_control + 1] = server
+          require("lspconfig")[server].setup(server_opts)
+        end
+      end
+
+
+      if servers_installer.mason then
+        lsp.Servers.install_mason_servers(servers_installer.mason, setup)
+      end
+
+      if servers_installer.custom then
+        for _, server_name in ipairs(servers_installer.custom) do
+          setup(server_name)
+        end
+      end
     end
   }
 }

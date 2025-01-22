@@ -1,7 +1,9 @@
 local M = {}
 local Keymaps = {}
+local Servers = {}
 
 M.Keymaps = Keymaps
+M.Servers = Servers
 
 --- A table that maps LSP method names to the corresponding clients and their supported buffers.
 ---
@@ -328,6 +330,92 @@ function Keymaps.on_attach(_, buffer)
       -- Set the keymap with the resolved options
       vim.keymap.set(keys.mode or "n", keys.lhs, keys.rhs, opts)
     end
+  end
+end
+
+-------------------------------------------------------------------------------
+--- Servers -------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+--- Determines which LSP servers need to be installed, categorizing them into 'mason' and 'custom' servers.
+---
+--- This function checks the provided LSP server configurations to identify which servers can be handled by
+--- the Mason package manager, and which require manual installation. It also takes into account whether
+--- each server is enabled or disabled, and whether Mason is explicitly disabled for any given server.
+---
+--- @param servers lspconfig.options: A table containing LSP server configurations, where each key is a server.
+---
+--- @return {mason: string[], custom: string[]}: A table with two fields:
+---   - `mason`: A list of LSP server names that should be handled by Mason.
+---   - `custom`: A list of LSP server names that need to be manually installed (not managed by Mason).
+function Servers.get_servers_to_install(servers)
+  local all_mslp_servers = {}
+
+  local have_mason, mlsp = pcall(require, "mason-lspconfig")
+  if have_mason then
+    all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
+  end
+
+  local mason_servers = {} ---@type string[]
+  local custom_servers = {} ---@type string[]
+
+  for server, server_opts in pairs(servers) do
+    if server_opts then
+      server_opts = server_opts == true and {} or server_opts
+      if server_opts.enabled ~= false then
+        -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+        if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
+          custom_servers[#custom_servers + 1] = server
+        else
+          mason_servers[#mason_servers + 1] = server
+        end
+      end
+    end
+  end
+
+  return {
+    mason = mason_servers,
+    custom = custom_servers
+  }
+end
+
+--- Installs the specified LSP servers via Mason package manager.
+---
+--- This function attempts to install the list of provided servers using the Mason package manager. It allows
+--- for optional setup of each server using a handler function. If the Mason package is not found or the
+--- server installation fails, no action is taken. The function also merges any servers defined in the
+--- `ensure_installed` option of the `mason-lspconfig` plugin configuration.
+---
+--- @param servers string[]: A list of LSP server names to be installed via Mason.
+---   - Each string in the array represents the name of an LSP server to ensure is installed.
+---
+--- @param setup_handler fun(server: string): any?: An optional handler function to set up each Mason-managed LSP server.
+---   - This function will be invoked for each server that is installed.
+---   - The handler receives the server name as a string argument.
+---
+--- @return nil
+---
+--- Example usage:
+---   local servers = {"pyright", "tsserver"}
+---   Servers.install_mason_servers(servers, function(server)
+---     -- custom setup logic for each server
+---     print("Setting up " .. server)
+---   end)
+function Servers.install_mason_servers(servers, setup_handler)
+  local have_mason, mlsp = pcall(require, "mason-lspconfig")
+
+  if have_mason then
+    local Plugins = require("joaopedro61.util.plugins")
+
+    mlsp.setup({
+      ensure_installed = vim.tbl_deep_extend(
+        "force",
+        servers or {},
+        Plugins.opts("mason-lspconfig.nvim").ensure_installed or {}
+      ),
+      handlers = { setup_handler },
+      automatic_installation = true
+    })
   end
 end
 
