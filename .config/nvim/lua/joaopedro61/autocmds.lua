@@ -7,7 +7,7 @@ autocmd("InsertLeave", {
 })
 
 -- Disable the concealing in some file formats
--- The default conceallevel is 3 in LazyVim
+-- The default conceallevel is 3
 autocmd("FileType", {
   pattern = { "json", "jsonc", "maskdown" },
   callback = function()

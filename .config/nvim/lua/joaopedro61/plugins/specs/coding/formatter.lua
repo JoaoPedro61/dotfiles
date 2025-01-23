@@ -16,12 +16,11 @@ return {
       {
         "<leader>cf",
         function()
-          vim.print("Format File...")
-          vim.lsp.buf.format()
+          require("joaopedro61.util.plugins.coding.format")()
         end,
         mode = { "n", "v" },
-        desc = "Format"
-      }
+        desc = "Format",
+      },
     },
     opts = {
       default_format_opts = {
@@ -30,10 +29,7 @@ return {
         quiet = false,
         lsp_format = "fallback",
       },
-      formatters_by_ft = {
-        lua = { "stylua" },
-        sh = { "shfmt" },
-      },
+      formatters_by_ft = {},
       -- The options you set here will be merged with the builtin formatters.
       -- You can also define any custom formatters here.
       ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
@@ -42,10 +38,30 @@ return {
       },
     },
     init = function()
-      -- Register the conform formatter
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyDone",
+        callback = function()
+          require("joaopedro61.util.plugins.coding.format").register({
+            name = "conform.nvim",
+            priority = 100,
+            primary = true,
+            format = function(buf)
+              require("conform").format({ bufnr = buf })
+            end,
+            sources = function(buf)
+              local ret = require("conform").list_formatters(buf)
+              ---@param v conform.FormatterInfo
+              return vim.tbl_map(function(v)
+                return v.name
+              end, ret)
+            end,
+          })
+        end,
+      })
     end,
     config = function(_, opts)
       require("conform").setup(opts)
-    end
-  }
+      vim.opt.formatexpr = "v:lua.require('joaopedro61.util.plugins.coding.format').formatexpr()"
+    end,
+  },
 }

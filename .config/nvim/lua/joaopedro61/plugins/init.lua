@@ -3,6 +3,7 @@ local ui = require("joaopedro61.ui");
 require("lazy").setup({
   spec = {
     { import = "joaopedro61.plugins.specs" },
+    { import = "joaopedro61.plugins.specs.ui" },
     { import = "joaopedro61.plugins.specs.coding" },
     { import = "joaopedro61.plugins.specs.coding.lang" },
     { import = "joaopedro61.plugins.specs.editor" },

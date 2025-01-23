@@ -2,6 +2,11 @@
 
 local M = {}
 
+--- Returns the current location in the source code by inspecting the stack trace.
+--- It looks for the first stack frame that is not from the current file or Vim's config (`MYVIMRC`).
+--- It returns the source file path and the line number of the resolved location.
+---
+--- @return string?: The file path and line number in the format `file:path:line` or `nil` if not found.
 function M.get_loc()
   local me = debug.getinfo(1, "S")
   local level = 2
@@ -16,8 +21,10 @@ function M.get_loc()
   return source .. ":" .. info.linedefined
 end
 
----@param value any
----@param opts? {loc:string}
+--- Dumps a value to the notification system, displaying the value with location information.
+--- If called during a fast event, it schedules the dump to be done asynchronously.
+--- @param value any: The value to be dumped.
+--- @param opts? {loc:string}: Optional settings, including a location string.
 function M._dump(value, opts)
   opts = opts or {}
   opts.loc = opts.loc or M.get_loc()
@@ -42,6 +49,9 @@ function M._dump(value, opts)
   })
 end
 
+--- Dumps one or more values to the notification system.
+--- Calls `_dump` to handle the value display.
+--- @param ... any: The values to be dumped.
 function M.dump(...)
   local value = { ... }
   if vim.tbl_isempty(value) then
@@ -52,9 +62,10 @@ function M.dump(...)
   M._dump(value)
 end
 
+--- Detects potential leaks of extmarks across buffers and namespaces.
+--- It lists and sorts the extmarks in use, grouped by namespace.
 function M.extmark_leaks()
   local nsn = vim.api.nvim_get_namespaces()
-
   local counts = {}
 
   for name, ns in pairs(nsn) do
@@ -76,7 +87,13 @@ function M.extmark_leaks()
   dd(counts)
 end
 
-function estimateSize(value, visited)
+--- Estimates the memory size of a value, recursively accounting for tables and upvalues.
+--- This function tracks previously visited values to avoid infinite recursion.
+--- @param value any: The value whose size is to be estimated.
+--- @param visited? table: A table tracking previously visited values (used for recursion detection).
+---
+--- @return number: The estimated size in bytes.
+local function estimateSize(value, visited)
   if value == nil then
     return 0
   end
@@ -124,12 +141,14 @@ function estimateSize(value, visited)
   return bytes
 end
 
+--- Detects potential memory leaks in loaded modules by estimating their size.
+--- It groups modules by their root name and sorts them by size.
+--- @param filter? string: A pattern to filter module names (optional).
 function M.module_leaks(filter)
   local sizes = {}
   for modname, mod in pairs(package.loaded) do
     if not filter or modname:match(filter) then
       local root = modname:match("^([^%.]+)%..*$") or modname
-      -- root = modname
       sizes[root] = sizes[root] or { mod = root, size = 0 }
       sizes[root].size = sizes[root].size + estimateSize(mod) / 1024 / 1024
     end
@@ -141,6 +160,11 @@ function M.module_leaks(filter)
   dd(sizes)
 end
 
+--- Retrieves the value of an upvalue from a function.
+--- @param func: function The function to inspect.
+--- @param name: string The name of the upvalue to retrieve.
+---
+--- @return any: The value of the upvalue or `nil` if not found.
 function M.get_upvalue(func, name)
   local i = 1
   while true do
@@ -156,3 +180,4 @@ function M.get_upvalue(func, name)
 end
 
 return M
+

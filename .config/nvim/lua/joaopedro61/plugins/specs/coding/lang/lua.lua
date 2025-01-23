@@ -1,11 +1,27 @@
 return {
   {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "lua",
+      },
+    },
+  },
+  {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
         "stylua",
         "shfmt",
-      }
+      },
+    },
+  },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        lua = { "stylua" },
+      },
     },
   },
   {
@@ -14,7 +30,7 @@ return {
     cmd = "LazyDev",
     opts = {
       library = {
-        { path = "snacks.nvim",        words = { "Snacks" } },
+        { path = "snacks.nvim", words = { "Snacks" } },
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
       },
     },
@@ -52,7 +68,7 @@ return {
             },
           },
         },
-      }
-    }
-  }
+      },
+    },
+  },
 }

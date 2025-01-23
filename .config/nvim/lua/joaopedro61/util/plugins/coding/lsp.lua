@@ -15,6 +15,33 @@ M.Servers = Servers
 --- and the value is a table containing the LSP client and a table of buffer numbers with boolean support status.
 M._supports_method = {}
 
+-- This code creates a table `M.action` and sets it up with a metatable.
+-- The metatable defines a custom `__index` metamethod, which intercepts
+-- attempts to access keys in `M.action`. When a key is accessed, it returns
+-- a function that triggers a LSP (Language Server Protocol) code action.
+
+-- The `vim.lsp.buf.code_action` function is called with the following options:
+-- - `apply = true`: It applies the code action immediately.
+-- - `context`: The context object, which specifies the code action details.
+--     - `only`: A list containing the specific code action to apply.
+--     - `diagnostics`: An empty list, indicating no diagnostics are passed in.
+
+M.action = setmetatable({}, {
+  -- The `__index` metamethod is called when an index (action) is accessed in `M.action`.
+  __index = function(_, action)
+    -- The returned function triggers a LSP code action for the given action name.
+    return function()
+      vim.lsp.buf.code_action({
+        apply = true, -- Automatically apply the code action
+        context = {
+          only = { action }, -- Only apply the specified action
+          diagnostics = {}, -- No diagnostics passed
+        },
+      })
+    end
+  end,
+})
+
 --- Retrieves a list of LSP clients based on provided filter options.
 ---
 --- This function returns a list of active LSP clients, with the ability to filter the results based on various options such as client ID, buffer number, client name, method support, and custom filtering functions.
@@ -22,8 +49,7 @@ M._supports_method = {}
 --- @param opts? lsp.Client.filter: Optional filter options to refine the list of returned LSP clients. The filter can be based on the client's ID, buffer number, name, method support, or a custom function.
 --- @return vim.lsp.Client[]: A list of LSP clients that match the filter criteria.
 ---
---- @alias lsp.Client.filter
----   { id?: number, bufnr?: number, name?: string, method?: string, filter?: fun(client: lsp.Client): boolean }
+--- @alias lsp.Client.filter: { id?: number, bufnr?: number, name?: string, method?: string, filter?: fun(client: lsp.Client): boolean }
 function M.get_clients(opts)
   local ret = {} ---@type vim.lsp.Client[]
 
@@ -199,10 +225,10 @@ end
 --- @return boolean Returns `true` if the buffer is valid, listed, has no `buftype`, and its filetype is not in the `exclude` list; otherwise, `false`.
 function M.is_valid_buf(buffer, exclude)
   if
-      vim.api.nvim_buf_is_valid(buffer)
-      and vim.bo[buffer].buftype == ""
-      and vim.bo[buffer].buflisted
-      and not vim.tbl_contains(exclude or {}, vim.bo[buffer].filetype)
+    vim.api.nvim_buf_is_valid(buffer)
+    and vim.bo[buffer].buftype == ""
+    and vim.bo[buffer].buflisted
+    and not vim.tbl_contains(exclude or {}, vim.bo[buffer].filetype)
   then
     return true
   end
@@ -375,7 +401,7 @@ function Servers.get_servers_to_install(servers)
 
   return {
     mason = mason_servers,
-    custom = custom_servers
+    custom = custom_servers,
   }
 end
 
@@ -414,9 +440,9 @@ function Servers.install_mason_servers(servers, setup_handler)
         Plugins.opts("mason-lspconfig.nvim").ensure_installed or {}
       ),
       handlers = { setup_handler },
-      automatic_installation = true
+      automatic_installation = true,
     })
   end
 end
 
-return M;
+return M

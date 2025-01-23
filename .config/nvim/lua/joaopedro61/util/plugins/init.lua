@@ -1,16 +1,28 @@
 local M = {}
 
----@param name string
+--- Retrieves a plugin configuration from the lazy.nvim plugin manager.
+---
+--- @param name string: The name of the plugin to retrieve.
+---
+--- @return table?: The plugin configuration if found, or `nil` if the plugin doesn't exist.
 function M.get_plugin(name)
   return require("lazy.core.config").spec.plugins[name]
 end
 
----@param plugin string
+--- Checks if a plugin is available in the lazy.nvim plugin manager.
+---
+--- @param plugin string: The name of the plugin to check.
+---
+--- @return boolean: `true` if the plugin is found, `false` otherwise.
 function M.has(plugin)
   return M.get_plugin(plugin) ~= nil
 end
 
----@param name string
+--- Retrieves the options of a plugin from the lazy.nvim plugin manager.
+---
+--- @param name string: The name of the plugin to get options for.
+---
+--- @return table: The options table for the plugin, or an empty table if the plugin is not found.
 function M.opts(name)
   local plugin = M.get_plugin(name)
   if not plugin then
@@ -20,15 +32,23 @@ function M.opts(name)
   return Plugin.values(plugin, "opts", false)
 end
 
----@param name string
+--- Checks if a plugin has been loaded by the lazy.nvim plugin manager.
+---
+--- @param name string: The name of the plugin to check.
+---
+--- @return boolean: `true` if the plugin is loaded, `false` otherwise.
 function M.is_loaded(name)
   local Config = require("lazy.core.config")
   return Config.plugins[name] and Config.plugins[name]._.loaded
 end
 
----@param pkg string
----@param path? string
----@param opts? { warn?: boolean }
+--- Retrieves the file path for a package managed by Mason.
+---
+--- @param pkg string: The name of the package.
+--- @param path string?: The specific path inside the package (optional).
+--- @param opts? { warn?: boolean }: Options to control warnings. If `warn` is `true`, a warning will be shown if the package or path does not exist (default is `true`).
+---
+--- @return string: The full file path to the package, including the optional specific path.
 function M.get_pkg_path(pkg, path, opts)
   pcall(require, "mason") -- make sure Mason is loaded. Will fail when generating docs
   local root = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
@@ -37,18 +57,23 @@ function M.get_pkg_path(pkg, path, opts)
   path = path or ""
   local ret = root .. "/packages/" .. pkg .. "/" .. path
   if opts.warn and not vim.loop.fs_stat(ret) and not require("lazy.core.config").headless() then
-    M.warn(
-      ("Mason package not found for **%s**:\n- `%s`\nTry install or update package."):format(pkg, path)
+    vim.notify(
+      ("Mason package not found for **%s**:\n- `%s`\nTry install or update package."):format(pkg, path),
+      vim.log.levels.WARN
     )
   end
   return ret
 end
 
----@generic T
----@param t T[]
----@param key string
----@param values T[]
----@return T[]?
+--- Extends a table by adding values to a specific key path in a nested table structure.
+---
+--- @generic T
+---
+--- @param t T[]: The table to extend.
+--- @param key string: The key path (using dot notation) where the values should be added.
+--- @param values T[]: The values to add to the specified key.
+---
+--- @return T[]?: The extended table, or `nil` if the key path is invalid.
 function M.extend(t, key, values)
   local keys = vim.split(key, ".", { plain = true })
   for i = 1, #keys do
@@ -63,3 +88,4 @@ function M.extend(t, key, values)
 end
 
 return M
+

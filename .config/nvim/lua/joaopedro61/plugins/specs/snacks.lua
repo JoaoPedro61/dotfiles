@@ -16,7 +16,7 @@ return {
       quickfile = { enabled = false },
       scroll = { enabled = false },
       statuscolumn = { enabled = false },
-      words = { enabled = false },
+      words = { enabled = true },
     },
     keys = {
       { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },

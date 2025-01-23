@@ -7,9 +7,7 @@ return {
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     opts_extend = { "ensure_installed" },
     opts = {
-      ensure_installed = {
-        "lua",
-      },
+      ensure_installed = { },
       auto_install = true,
       autopairs = { enable = true },
       indent = { enable = true },
@@ -23,7 +21,8 @@ return {
         max_file_lines = nil,
       },
     },
-    init = function()
+    init = function(plugin)
+      require("lazy.core.loader").add_to_rtp(plugin)
       require("nvim-treesitter.query_predicates")
     end,
     config = function(_, opts)
