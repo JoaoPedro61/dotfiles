@@ -73,6 +73,7 @@ return {
         }),
 
         mapping = {
+          ['<C-q>'] = cmp.mapping.abort(),
           ["<C-j>"] = cmp.mapping({
             i = function(fallback)
               if cmp.visible() and cmp.visible_docs() then

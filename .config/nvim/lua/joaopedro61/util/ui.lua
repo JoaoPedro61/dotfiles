@@ -1,11 +1,14 @@
 local M = {}
 
+-- for more icons see: https://github.com/2KAbhishek/nerdy.nvim/blob/main/lua/nerdy/icons.lua
 M.icons = {
   error = " ",
   warn = " ",
   info = " ",
 
   wrench = "",
+
+  tab = "",
 
   git = {
     branch = "",

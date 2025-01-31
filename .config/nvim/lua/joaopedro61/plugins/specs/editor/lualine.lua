@@ -198,6 +198,14 @@ return {
       --- Left lualine component ----------------------------------------------
       -------------------------------------------------------------------------
       ins_right {
+        function ()
+          return vim.opt.tabstop:get() .. ''
+        end,
+        icon = ui.icons.tab,
+        color = with_fg_based({ gui = 'bold'})
+      }
+
+      ins_right {
         'lsp_progress',
         display_components = { 'lsp_client_name', 'spinner', },
         colors = {
