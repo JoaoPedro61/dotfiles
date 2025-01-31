@@ -1,5 +1,5 @@
 local has_words_before = require("joaopedro61.util.has_words_before")
-local ui = require("joaopedro61.ui")
+local ui = require("joaopedro61.util.ui")
 
 return {
   {
@@ -53,12 +53,12 @@ return {
         },
         window = {
           completion = cmp.config.window.bordered({
-            border = ui.window.get_win_borders(),
-            winhighlight = ui.window.get_win_highlight(),
+            border = ui.get_win_borders(),
+            winhighlight = ui.get_win_highlight(),
           }),
           documentation = cmp.config.window.bordered({
-            border = ui.window.get_win_borders(),
-            winhighlight = ui.window.get_win_highlight_docs(),
+            border = ui.get_win_borders(),
+            winhighlight = ui.get_win_highlight_docs(),
           }),
         },
         sources = cmp.config.sources({

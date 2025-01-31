@@ -13,14 +13,6 @@ return {
         mode = { "n", "v" },
         desc = "Format Injected Langs",
       },
-      {
-        "<leader>cf",
-        function()
-          require("joaopedro61.util.plugins.coding.format")()
-        end,
-        mode = { "n", "v" },
-        desc = "Format",
-      },
     },
     opts = {
       default_format_opts = {
@@ -41,7 +33,7 @@ return {
       vim.api.nvim_create_autocmd("User", {
         pattern = "LazyDone",
         callback = function()
-          require("joaopedro61.util.plugins.coding.format").register({
+          require("joaopedro61.plugins.util.format").register({
             name = "conform.nvim",
             priority = 100,
             primary = true,
@@ -58,10 +50,8 @@ return {
           })
         end,
       })
-    end,
-    config = function(_, opts)
-      require("conform").setup(opts)
-      vim.opt.formatexpr = "v:lua.require('joaopedro61.util.plugins.coding.format').formatexpr()"
+
+      vim.opt.formatexpr = "v:lua.require('joaopedro61.plugins.util.format').formatexpr()"
     end,
   },
 }

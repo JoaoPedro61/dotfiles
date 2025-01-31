@@ -65,27 +65,4 @@ function M.get_pkg_path(pkg, path, opts)
   return ret
 end
 
---- Extends a table by adding values to a specific key path in a nested table structure.
----
---- @generic T
----
---- @param t T[]: The table to extend.
---- @param key string: The key path (using dot notation) where the values should be added.
---- @param values T[]: The values to add to the specified key.
----
---- @return T[]?: The extended table, or `nil` if the key path is invalid.
-function M.extend(t, key, values)
-  local keys = vim.split(key, ".", { plain = true })
-  for i = 1, #keys do
-    local k = keys[i]
-    t[k] = t[k] or {}
-    if type(t) ~= "table" then
-      return
-    end
-    t = t[k]
-  end
-  return vim.list_extend(t, values)
-end
-
 return M
-

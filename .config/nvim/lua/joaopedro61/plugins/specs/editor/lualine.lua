@@ -1,4 +1,4 @@
-local icons = require("joaopedro61.ui.icons")
+local ui = require("joaopedro61.util.ui")
 
 return {
   {
@@ -160,7 +160,11 @@ return {
       ins_left {
         'diagnostics',
         sources = { 'nvim_diagnostic', 'nvim_lsp' },
-        symbols = { error = icons.error, warn = icons.warn, info = icons.info },
+        symbols = {
+          error = ui.icons.error,
+          warn = ui.icons.warn,
+          info = ui.icons.info
+        },
         diagnostics_color = {
           error = { fg = colors.red },
           warn = { fg = colors.yellow },
@@ -170,7 +174,7 @@ return {
 
       ins_left {
         function()
-          local msg = 'No Active Lsp'
+          local msg = 'No Active'
           local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
           local clients = vim.lsp.get_clients()
           if next(clients) == nil then
@@ -184,7 +188,7 @@ return {
           end
           return msg
         end,
-        icon = ' LSP:',
+        icon = ui.icons.wrench .. ' LSP:',
         color = with_fg_based({ gui = 'bold' })
       }
       -------------------------------------------------------------------------
@@ -230,7 +234,11 @@ return {
 
       ins_right {
         'diff',
-        symbols = { added = icons.diff.added, modified = icons.diff.modified, removed = icons.diff.removed },
+        symbols = {
+          added = ui.icons.git.diff.added,
+          modified = ui.icons.git.diff.modified,
+          removed = ui.icons.git.diff.removed
+        },
         diff_color = {
           added = { fg = colors.green },
           modified = { fg = colors.orange },

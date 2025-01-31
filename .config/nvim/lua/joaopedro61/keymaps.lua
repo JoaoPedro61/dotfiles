@@ -1,4 +1,4 @@
-local merge = require("joaopedro61.util.merge_tables")
+local merge = require("joaopedro61.util.merge")
 
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
@@ -35,3 +35,15 @@ map("n", "<leader>bd", ":bd<Return>", merge(buffers_opts, { desc = "Close buffer
 -- Comments
 map("n", "<leader>cc", "gcc", comment_opts)
 map("v", "<leader>cc", "gc", comment_opts)
+
+-- Move Blocks
+map("v", "<C-j>", ":m '>+1<CR>gv=gv")
+map("v", "<C-k>", ":m '<-2<CR>gv=gv")
+
+-- Format file
+map('n', "<leader>cf", function ()
+  require("joaopedro61.plugins.util.format")()
+end, merge(opts, { desc = "Format file" }))
+
+-- Save User Settings
+map('n', "<leader>S", "<cmd>SaveUserSettings<cr>", merge(opts, { desc = "Save User Settings" }))

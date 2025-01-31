@@ -1,10 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
-
--- Turn off paste mode when leaving insert
-autocmd("InsertLeave", {
-  pattern = "*",
-  command = "set nopaste",
-})
+local createcmd = vim.api.nvim_create_user_command;
 
 -- Disable the concealing in some file formats
 -- The default conceallevel is 3
@@ -29,3 +24,18 @@ autocmd("Filetype", {
     vim.opt_local.spell = true
   end
 })
+
+autocmd("BufWritePre", {
+  callback = function (event)
+    local settings = require("joaopedro61.settings");
+    if settings.auto_format.enable then
+      if not vim.tbl_contains(settings.auto_format.exclude, vim.bo.filetype) then
+        require("joaopedro61.plugins.util.format")()
+      end
+    end
+  end
+})
+
+createcmd("SaveUserSettings", function()
+  require("joaopedro61.settings").save();
+end, { desc = "Save user settings" })

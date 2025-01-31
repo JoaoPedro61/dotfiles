@@ -7,4 +7,5 @@ _G.dd = function(...)
 end
 vim.print = _G.dd
 
+-- Source our custom script and helpers
 require("joaopedro61")

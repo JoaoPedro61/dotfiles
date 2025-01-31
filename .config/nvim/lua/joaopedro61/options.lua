@@ -6,10 +6,11 @@
 
 local shell = require("joaopedro61.util.shell")
 local platform = require("joaopedro61.util.platform")
+local disable_builtin = require("joaopedro61.util.disable_builtin")
 
 local cmd = vim.cmd
 local opt = vim.opt
-local g = vim.g
+
 local indent = 2
 
 -- commom
@@ -59,8 +60,9 @@ opt.path:append({ "**" })
 -- ui
 opt.cursorline = true
 opt.laststatus = 2 -- or 3
-opt.lazyredraw = true
+opt.lazyredraw = false -- enable lazy redrawing, but may occours errors using noice.nvim
 opt.list = true
+opt.guicursor = ""
 
 -- backups
 opt.backup = false
@@ -73,12 +75,12 @@ end
 -- autocomplete
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.shortmess = opt.shortmess + {
-  c = true
+  c = true,
 }
 
 -- perfomance
 opt.history = 100
-opt.redrawtime = 1500
+opt.redrawtime = 800
 opt.timeoutlen = 250
 opt.ttimeoutlen = 10
 opt.updatetime = 100
@@ -101,12 +103,4 @@ cmd([[ au BufNewFile,BufRead *.astro setf astro ]])
 cmd([[ au BufNewFile,BufRead Podfile setf ruby ]])
 
 -- Disable builtin plugins
-local disabled_built_ins = {
-  "2html_plugin", "getscript", "getscriptPlugin", "gzip", "logipat", "netrw", "netrwPlugin",
-  "netrwSettings", "netrwFileHandlers", "matchit", "tar", "tarPlugin", "rrhelper",
-  "spellfile_plugin", "vimball", "vimballPlugin", "zip", "zipPlugin", "tutor", "rplugin",
-  "synmenu", "optwin", "compiler", "bugreport", "ftplugin"
-}
-for _, plugin in pairs(disabled_built_ins) do
-  g["loaded_" .. plugin] = 1
-end
+disable_builtin()

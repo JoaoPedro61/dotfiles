@@ -3,9 +3,7 @@ return {
     'akinsho/bufferline.nvim',
     dependencies = {
       'nvim-tree/nvim-web-devicons',
-      "folke/snacks.nvim"
     },
-    version = "*",
     keys = {},
     opts = function()
       --- @type any

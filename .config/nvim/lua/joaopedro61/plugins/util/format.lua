@@ -7,17 +7,18 @@ local M = setmetatable({}, {
   end,
 })
 
---- @class Formatter
+--- @class joaopedro61.Plugins.Util.Format.Formatter
+--- 
 --- @field name string: The name of the formatter.
 --- @field primary? boolean: Indicates if the formatter is the primary one. Optional.
 --- @field format fun(bufnr:number) Function that applies the formatting to the buffer.
 --- @field sources fun(bufnr:number):string[]: Function that returns a list of sources (strings) from the buffer.
 --- @field priority number: The priority of the formatter. Formatters with higher priority are applied first.
 
-M.formatters = {} ---@type Formatter[]: List of registered formatters.
+M.formatters = {} ---@type joaopedro61.Plugins.Util.Format.Formatter[]: List of registered formatters.
 
 --- Registers a formatter in the module.
---- @param formatter Formatter: The formatter to be registered.
+--- @param formatter joaopedro61.Plugins.Util.Format.Formatter: The formatter to be registered.
 function M.register(formatter)
   M.formatters[#M.formatters + 1] = formatter
   table.sort(M.formatters, function(a, b)
@@ -37,11 +38,11 @@ end
 
 --- Resolves and returns a list of available formatters for the provided buffer.
 --- @param buf? number: The buffer number (optional, default is the current buffer).
---- @return (Formatter|{active:boolean,resolved:string[]})[]: List of objects containing information about each formatter.
+--- @return (joaopedro61.Plugins.Util.Format.Formatter|{active:boolean,resolved:string[]})[]: List of objects containing information about each formatter.
 function M.resolve(buf)
   buf = buf or vim.api.nvim_get_current_buf()
   local have_primary = false
-  --- @param formatter Formatter
+  --- @param formatter joaopedro61.Plugins.Util.Format.Formatter
   return vim.tbl_map(function(formatter)
     local sources = formatter.sources(buf)
     local active = #sources > 0 and (not formatter.primary or not have_primary)
@@ -77,4 +78,3 @@ function M.format(opts)
 end
 
 return M
-

@@ -1,9 +1,14 @@
+local plugin = require("joaopedro61.plugins.util.plugin");
+local lazy_util = require("lazy.core.util")
+local util_format = require("joaopedro61.plugins.util.format")
+
 local M = {}
+
 local Keymaps = {}
 local Servers = {}
 
-M.Keymaps = Keymaps
-M.Servers = Servers
+M.keymaps = Keymaps
+M.servers = Servers
 
 --- A table that maps LSP method names to the corresponding clients and their supported buffers.
 ---
@@ -235,6 +240,66 @@ function M.is_valid_buf(buffer, exclude)
   return false
 end
 
+--- Formats the current buffer using either LSP or Conform.
+--- This function attempts to use the `conform` plugin for better formatting diffs.
+--- If `conform` is not available, it falls back to using LSP formatting.
+--- @param opts (lsp.Client.format?) Options for formatting. This may include any valid LSP formatting options.
+--- @see vim.lsp.buf.format for LSP formatting options
+function M.format(opts)
+  opts = vim.tbl_deep_extend(
+    "force",
+    {},
+    opts or {},
+    plugin.opts("nvim-lspconfig").format or {},
+    plugin.opts("conform.nvim").format or {}
+  )
+  local ok, conform = pcall(require, "conform")
+  if ok then
+    opts.formatters = {}
+    conform.format(opts)
+  else
+    vim.lsp.buf.format(opts)
+  end
+end
+
+--- Creates a formatter object with options for formatting.
+--- This function creates a formatter with LSP as the default formatter.
+--- The resulting formatter object can be used to format buffers and get LSP client names that support formatting.
+--- 
+--- @param opts? (joaopedro61.Plugins.Util.Format.Formatter | { filter?: (string|lsp.Client.filter) }) Options for the formatter.
+--- If a `filter` is provided, it will be used to filter the LSP clients.
+--- @return (joaopedro61.Plugins.Util.Format.Formatter) The created formatter object.
+--- 
+--- @see M.format for the function that formats the buffer.
+function M.formatter(opts)
+  opts = opts or {}
+  local filter = opts.filter or {}
+  filter = type(filter) == "string" and { name = filter } or filter
+  ---@cast filter lsp.Client.filter
+  ---@type joaopedro61.Plugins.Util.Format.Formatter
+  local ret = {
+    name = "LSP",
+    primary = true,
+    priority = 1,
+    format = function(buf)
+      M.format(lazy_util.merge({}, filter, { bufnr = buf }))
+    end,
+    sources = function(buf)
+      local clients = M.get_clients(lazy_util.merge({}, filter, { bufnr = buf }))
+      ---@param client vim.lsp.Client
+      local ret = vim.tbl_filter(function(client)
+        return client.supports_method("textDocument/formatting")
+          or client.supports_method("textDocument/rangeFormatting")
+      end, clients)
+      ---@param client vim.lsp.Client
+      return vim.tbl_map(function(client)
+        return client.name
+      end, ret)
+    end,
+  }
+  return lazy_util.merge(ret, opts) --[[@as joaopedro61.Plugins.Util.Format.Formatter]]
+end
+
 --- Sets up LSP handlers and registers autocommands to track dynamic capabilities and method support.
 ---
 --- This also setup and add keymaps for the lsp clients
@@ -248,6 +313,8 @@ end
 ---
 --- @return nil This function does not return a value.
 function M.setup()
+  util_format.register(M.formatter())
+
   local register_capability = vim.lsp.handlers["client/registerCapability"]
   vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
     ---@diagnostic disable-next-line: no-unknown
@@ -314,9 +381,7 @@ function Keymaps.resolve(buffer)
     return {}
   end
 
-  local Plugins = require("joaopedro61.util.plugins")
-
-  local opts = Plugins.opts("nvim-lspconfig")
+  local opts = plugin.opts("nvim-lspconfig")
   local opts_keys = type(opts.keys) == "function" and opts.keys() or (opts.keys or {})
   local spec = vim.tbl_extend("force", {}, opts_keys)
   local clients = M.get_clients({ bufnr = buffer })
@@ -377,7 +442,7 @@ end
 function Servers.get_servers_to_install(servers)
   local all_mslp_servers = {}
 
-  local have_mason, mlsp = pcall(require, "mason-lspconfig")
+  local have_mason, _ = pcall(require, "mason-lspconfig")
   if have_mason then
     all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
   end
@@ -431,13 +496,11 @@ function Servers.install_mason_servers(servers, setup_handler)
   local have_mason, mlsp = pcall(require, "mason-lspconfig")
 
   if have_mason then
-    local Plugins = require("joaopedro61.util.plugins")
-
     mlsp.setup({
       ensure_installed = vim.tbl_deep_extend(
         "force",
         servers or {},
-        Plugins.opts("mason-lspconfig.nvim").ensure_installed or {}
+        plugin.opts("mason-lspconfig.nvim").ensure_installed or {}
       ),
       handlers = { setup_handler },
       automatic_installation = true,
