@@ -6,6 +6,8 @@ M.icons = {
   warn = " ",
   info = " ",
 
+  dot = "",
+
   wrench = "",
 
   tab = "",
