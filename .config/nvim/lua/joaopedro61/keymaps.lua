@@ -41,9 +41,6 @@ map("v", "<C-j>", ":m '>+1<CR>gv=gv")
 map("v", "<C-k>", ":m '<-2<CR>gv=gv")
 
 -- Format file
-map('n', "<leader>cf", function ()
+map("n", "<leader>cf", function()
   require("joaopedro61.plugins.util.format")()
 end, merge(opts, { desc = "Format file" }))
-
--- Save User Settings
-map('n', "<leader>S", "<cmd>SaveUserSettings<cr>", merge(opts, { desc = "Save User Settings" }))

@@ -6,11 +6,11 @@ return {
       local wk = require("which-key")
 
       wk.setup({
-        preset = "modern"
+        preset = "modern",
       })
 
       wk.add({
-        { "<leader>f",     group = "file" },
+        { "<leader>f", group = "file" },
         {
           "<leader>b",
           group = "buffers",
@@ -26,11 +26,13 @@ return {
             return require("which-key.extras").expand.win()
           end,
         },
-        { "<leader>c",     group = "code" },
-        { "<leader>u",     group = "ui" },
+        { "<leader>c", group = "code" },
+        { "<leader>u", group = "ui" },
         { "<leader><tab>", group = "tabpage" },
-        { "<leader>p",     group = "plugins" },
-      });
-    end
-  }
+        { "<leader>p", group = "plugins" },
+        { "<leader>S", group = "settings" },
+      })
+    end,
+  },
 }
+

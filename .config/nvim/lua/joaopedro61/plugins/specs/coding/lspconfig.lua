@@ -1,5 +1,5 @@
 local lsp = require("joaopedro61.plugins.util.lsp")
-local settings = require("joaopedro61.settings");
+local settings = require("joaopedro61.settings")
 
 return {
   {
@@ -15,7 +15,7 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim"
+      "williamboman/mason-lspconfig.nvim",
     },
     opts = {
       keys = {
@@ -125,30 +125,37 @@ return {
         },
       },
     },
-    config = function (_, opts)
+    config = function(_, opts)
       lsp.setup()
 
-      if settings.lsp.inlay_hints.enable and vim.lsp.inlay_hint then
+      if vim.lsp.inlay_hint then
         lsp.on_supports_method("textdocument/inlayhint", function(_, buffer)
-          if lsp.is_valid_buf(buffer, settings.lsp.inlay_hints.exclude) then
-            vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+          if settings.safe_get("lsp.inlay_hint.enable", false) then
+            local exclude = settings.safe_get("lsp.inlay_hint.exclude", false)
+            if lsp.is_valid_buf(buffer, exclude) then
+              vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+            end
           end
         end)
       end
 
-      if settings.lsp.codelens.enable and vim.lsp.codelens then
+      if vim.lsp.codelens then
         lsp.on_supports_method("textdocument/codelens", function(_, buffer)
-          if lsp.is_valid_buf(buffer, settings.lsp.codelens.exclude) then
-            vim.lsp.codelens.refresh()
+          if settings.safe_get("lsp.codelens.enable", false) then
+            local exclude = settings.safe_get("lsp.codelens.exclude", {})
+            local valid_buf = lsp.is_valid_buf(buffer, exclude)
+            if valid_buf then
+              vim.api.nvim_create_autocmd({
+                "BufEnter", --[[ "CursorHold",]]
+                "InsertLeave",
+              }, {
+                buffer = buffer,
+                callback = function()
+                  vim.lsp.codelens.refresh()
+                end,
+              })
+            end
           end
-          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-            buffer = buffer,
-            callback = function()
-              if lsp.is_valid_buf(buffer, settings.lsp.codelens.exclude) then
-                vim.lsp.codelens.refresh()
-              end
-            end,
-          })
         end)
       end
 
@@ -190,6 +197,6 @@ return {
           setup(server_name)
         end
       end
-    end
-  }
+    end,
+  },
 }

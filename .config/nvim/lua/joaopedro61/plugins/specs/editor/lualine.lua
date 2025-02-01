@@ -174,7 +174,7 @@ return {
 
       ins_left({
         function()
-          local inactive = "No Active"
+          local inactive = "Inactive"
           local clients = vim.lsp.get_clients()
           if next(clients) == nil then
             return inactive

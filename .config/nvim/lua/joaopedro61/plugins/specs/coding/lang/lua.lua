@@ -41,12 +41,12 @@ return {
       servers = {
         lua_ls = {
           settings = {
-            lua = {
+            Lua = {
               runtime = {
-                version = "luajit",
+                version = "LuaJIT",
               },
               diagnostics = {
-                globals = { "vim", "nvim_bufferline" },
+                globals = { "vim", "nvim_bufferline", "Snacks" },
               },
               workspace = {
                 library = vim.api.nvim_get_runtime_file("", true),
@@ -59,9 +59,9 @@ return {
               },
               hint = {
                 enable = true,
-                setType = false,
+                setType = true,
                 paramType = true,
-                paramName = "Disable",
+                paramName = "All",
                 semicolon = "Disable",
                 arrayIndex = "Disable",
               },

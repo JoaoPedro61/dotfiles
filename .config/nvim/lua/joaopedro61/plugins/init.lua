@@ -1,3 +1,5 @@
+local settings = require("joaopedro61.settings")
+
 require("lazy").setup({
   spec = {
     -- import/override with your plugins
@@ -13,7 +15,7 @@ require("lazy").setup({
   },
   install = {
     missing = true,
-    colorscheme = { require("joaopedro61.settings").colorscheme or "default" },
+    colorscheme = { settings.safe_get("colorscheme", "default") },
   },
   checker = {
     enabled = true,
