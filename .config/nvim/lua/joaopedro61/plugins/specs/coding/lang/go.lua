@@ -1,6 +1,7 @@
 local lsp = require("joaopedro61.plugins.util.lsp")
 
 return {
+  { import = "joaopedro61.plugins.specs.coding.lang.yaml" },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -8,8 +9,8 @@ return {
         "go",
         "gomod",
         "gowork",
-        "gosum"
-      }
+        "gosum",
+      },
     },
   },
   {
@@ -17,8 +18,8 @@ return {
     opts = {
       ensure_installed = {
         "goimports",
-        "gofumpt"
-      }
+        "gofumpt",
+      },
     },
   },
   {
@@ -27,7 +28,7 @@ return {
       formatters_by_ft = {
         go = {
           "goimports",
-          "gofumpt"
+          "gofumpt",
         },
       },
     },

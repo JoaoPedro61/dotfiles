@@ -9,14 +9,15 @@ return {
       })
 
       table.insert(opts.ensure_installed, "git_config")
+      table.insert(opts.ensure_installed, "bash")
     end,
   },
   {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
-        "shellcheck"
-      }
+        "shellcheck",
+      },
     },
   },
   {

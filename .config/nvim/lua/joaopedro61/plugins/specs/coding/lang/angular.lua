@@ -3,11 +3,14 @@ local plugin = require("joaopedro61.plugins.util.plugin")
 local extend = require("joaopedro61.util.extend")
 
 return {
+  { import = "joaopedro61.plugins.specs.coding.lang.css" },
+  { import = "joaopedro61.plugins.specs.coding.lang.html" },
+  { import = "joaopedro61.plugins.specs.coding.lang.typescript" },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
       if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "angular", "scss", "css" })
+        vim.list_extend(opts.ensure_installed, { "angular" })
       end
       vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
         pattern = { "*.html", "*.html" },
@@ -17,7 +20,6 @@ return {
       })
     end,
   },
-  { import = "joaopedro61.plugins.specs.coding.lang.typescript" },
   {
     "neovim/nvim-lspconfig",
     opts = {

@@ -1,9 +1,10 @@
 return {
+  { import = "joaopedro61.plugins.specs.coding.lang.css" },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
-        "toml",
+        "html",
       },
     },
   },
@@ -11,7 +12,7 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        taplo = {},
+        html = {},
       },
     },
   },

@@ -1,13 +1,15 @@
 local lsp = require("joaopedro61.plugins.util.lsp")
 
 return {
+  { import = "joaopedro61.plugins.specs.coding.lang.css" },
+  { import = "joaopedro61.plugins.specs.coding.lang.html" },
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
         tailwindcss = {
           -- exclude a filetype from the default_config
-          filetypes_exclude = { "markdown" },
+          filetypes_exclude = { "markdown", "text" },
           -- add additional filetypes to the default_config
           filetypes_include = {
             "typescript",

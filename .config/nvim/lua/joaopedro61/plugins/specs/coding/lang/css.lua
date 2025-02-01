@@ -3,7 +3,8 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
-        "toml",
+        "css",
+        "scss",
       },
     },
   },
@@ -11,7 +12,9 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        taplo = {},
+        cssls = {},
+        css_variables = {},
+        cssmodules_ls = {},
       },
     },
   },

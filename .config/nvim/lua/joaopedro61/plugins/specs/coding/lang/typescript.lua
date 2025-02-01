@@ -2,6 +2,16 @@ local lsp = require("joaopedro61.plugins.util.lsp")
 
 return {
   {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "tsx",
+        "typescript",
+        "javascript",
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     opts = {
       -- make sure mason installs the server
@@ -126,12 +136,8 @@ return {
             end
           end, "vtsls")
 
-          opts.settings.javascript = vim.tbl_deep_extend(
-            "force",
-            {},
-            opts.settings.typescript,
-            opts.settings.javascript or {}
-          )
+          opts.settings.javascript =
+            vim.tbl_deep_extend("force", {}, opts.settings.typescript, opts.settings.javascript or {})
         end,
       },
     },
