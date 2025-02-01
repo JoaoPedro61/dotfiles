@@ -1,8 +1,6 @@
 local lsp = require("joaopedro61.plugins.util.lsp")
 
 return {
-  { import = "joaopedro61.plugins.specs.coding.lang.css" },
-  { import = "joaopedro61.plugins.specs.coding.lang.html" },
   {
     "neovim/nvim-lspconfig",
     opts = {

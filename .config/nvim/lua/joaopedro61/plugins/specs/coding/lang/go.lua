@@ -1,7 +1,6 @@
 local lsp = require("joaopedro61.plugins.util.lsp")
 
 return {
-  { import = "joaopedro61.plugins.specs.coding.lang.yaml" },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {

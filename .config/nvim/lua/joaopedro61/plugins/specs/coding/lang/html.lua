@@ -1,5 +1,4 @@
 return {
-  { import = "joaopedro61.plugins.specs.coding.lang.css" },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {

@@ -3,9 +3,6 @@ local plugin = require("joaopedro61.plugins.util.plugin")
 local extend = require("joaopedro61.util.extend")
 
 return {
-  { import = "joaopedro61.plugins.specs.coding.lang.css" },
-  { import = "joaopedro61.plugins.specs.coding.lang.html" },
-  { import = "joaopedro61.plugins.specs.coding.lang.typescript" },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
@@ -22,6 +19,9 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      { import = "joaopedro61.plugins.specs.coding.lang.typescript" }
+    },
     opts = {
       servers = {
         angularls = {},
