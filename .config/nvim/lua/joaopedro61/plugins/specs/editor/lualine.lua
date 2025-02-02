@@ -240,7 +240,7 @@ return {
 
       ins_right({
         "branch",
-        icon = "",
+        icon = ui.icons.git.branch,
         color = { fg = colors.violet, gui = "bold" },
       })
 

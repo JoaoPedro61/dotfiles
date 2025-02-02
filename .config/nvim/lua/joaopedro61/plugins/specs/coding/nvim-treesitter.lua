@@ -2,7 +2,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     lazy = true,
-    build = ":TSUpdate",
+    build = ":TSInstall",
     event = "BufRead",
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     opts_extend = { "ensure_installed" },
