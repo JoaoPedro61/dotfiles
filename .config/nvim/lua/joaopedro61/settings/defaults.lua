@@ -20,8 +20,6 @@
 ---
 --- @class joaopedro61.Settings
 --- A table representing the user settings.
---- @field colorscheme? (string) Optional setting for the colorscheme (default is "default").
---- @field transparent? (boolean) Optional setting for transparency (default is false).
 --- @field auto_format? (joaopedro61.Settings.AutoFormat) Optional setting for auto-formatting behavior (default is false).
 --- @field lsp? (joaopedro61.Settings.Lsp) Optional LSP settings (default is empty).
 
@@ -30,7 +28,6 @@ local default_settings = {
     enable = false,
     exclude = {},
   },
-  colorscheme = "default",
   lsp = {
     inlay_hint = {
       enable = true,

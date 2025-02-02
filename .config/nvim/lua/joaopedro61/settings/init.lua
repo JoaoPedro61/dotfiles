@@ -71,7 +71,7 @@ local default_opts = {
   keymaps = {
     enable = true, -- By default, keymaps are enabled.
   },
-} --- @type joaopedro61.Settings.Opts
+}                  --- @type joaopedro61.Settings.Opts
 
 --- Sets up the settings by loading the settings file and applying the options passed in the `opts` parameter.
 --- If `opts.keymaps.enable` is `true`, the keymaps configuration is loaded.

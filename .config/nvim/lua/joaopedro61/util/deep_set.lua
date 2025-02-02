@@ -24,30 +24,40 @@ local deep_set = function(root, path, value, override)
   local target = root or {}
 
   -- Traverse the path to find the target table
-  for i = 1, #keys do
-    local k = keys[i]
-    -- If the key doesn't exist, initialize it as an empty table
-    target[k] = target[k] or {}
-
-    -- If the target is not a table at any point, return nil
-    if type(target) ~= "table" then
-      return
+  for index, key in ipairs(keys) do
+    if index ~= #keys then
+      -- If the key doesn't exist, initialize it as an empty table
+      if target[key] == nil then
+        target[key] = {} -- Create an empty table if the key doesn't exist
+      end
+      -- Move deeper into the table
+      target = target[key]
     end
-    -- Move deeper into the table
-    target = target[k]
   end
 
-  -- Set the value based on the 'override' flag and the type of 'value'
-  if type(value) == "table" and not override then
-    -- Merge the value if it's a table and override is false
-    target = vim.list_extend(target, value)
+  if type(target) ~= "table" then
+    return
+  end
+
+  local last_key = keys[#keys]
+
+  if override then
+    -- Simply set the value
+    target[last_key] = value
   else
-    -- Directly set the value if override is true or value is not a table
-    target = value
+    -- Extend the value (assuming tables and values can be merged)
+    if type(target) == "table" and type(value) == "table" then
+      for k, v in pairs(value) do
+        target[k] = v
+      end
+    else
+      -- If override is false and not both values are tables, set the value
+      target[last_key] = value
+    end
   end
 
   -- Return the newly set value
-  return target
+  return target[last_key]
 end
 
 return deep_set
