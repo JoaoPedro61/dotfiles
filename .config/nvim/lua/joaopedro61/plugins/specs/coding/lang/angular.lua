@@ -18,6 +18,26 @@ return {
     end,
   },
   {
+    "stevearc/conform.nvim",
+    dependencies = {
+      {
+        "williamboman/mason.nvim",
+        opts = {
+          ensure_installed = {
+            "prettier",
+          },
+        },
+      },
+    },
+    opts = {
+      formatters_by_ft = {
+        htmlangular = {
+          "prettier",
+        }
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       { import = "joaopedro61.plugins.specs.coding.lang.typescript" }

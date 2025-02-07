@@ -1,6 +1,16 @@
 return {
   {
     "mfussenegger/nvim-lint",
+    dependencies = {
+      {
+        "williamboman/mason.nvim",
+        opts = {
+          ensure_installed = {
+            "eslint-lsp",
+          },
+        },
+      },
+    },
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     opts = {
       events = { "BufWritePost", "BufReadPost", "InsertLeave" },

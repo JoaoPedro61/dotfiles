@@ -9,14 +9,6 @@ return {
     },
   },
   {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "rust-analyzer"
-      }
-    }
-  },
-  {
     "Saecki/crates.nvim",
     event = { "BufRead Cargo.toml" },
     opts = {
@@ -37,6 +29,16 @@ return {
     "mrcjkb/rustaceanvim",
     version = false,
     ft = { "rust" },
+    dependencies = {
+      {
+        "williamboman/mason.nvim",
+        opts = {
+          ensure_installed = {
+            "rust-analyzer"
+          }
+        }
+      },
+    },
     opts = {
       server = {
         on_attach = function(_, bufnr)

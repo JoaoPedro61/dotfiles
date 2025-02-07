@@ -13,16 +13,18 @@ return {
     },
   },
   {
-    "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "goimports",
-        "gofumpt",
+    "stevearc/conform.nvim",
+    dependencies = {
+      {
+        "williamboman/mason.nvim",
+        opts = {
+          ensure_installed = {
+            "goimports",
+            "gofumpt",
+          },
+        },
       },
     },
-  },
-  {
-    "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
         go = {

@@ -10,6 +10,26 @@ return {
     },
   },
   {
+    "stevearc/conform.nvim",
+    dependencies = {
+      {
+        "williamboman/mason.nvim",
+        opts = {
+          ensure_installed = {
+            "prettier",
+          },
+        },
+      },
+    },
+    opts = {
+      formatters_by_ft = {
+        json = {
+          "prettier",
+        },
+      },
+    },
+  },
+  {
     "b0o/SchemaStore.nvim",
     lazy = true,
     version = false,
