@@ -3,7 +3,7 @@ return {
     "williamboman/mason.nvim",
     build = ":MasonUpdate",
     opts_extend = {
-      "ensure_installed" -- this will cause the "ensure_installed" in opts property to be extended instead of replicated
+      "ensure_installed", -- this will cause the "ensure_installed" in opts property to be extended instead of replicated
     },
     opts = {
       ensure_installed = {},
@@ -13,9 +13,6 @@ return {
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}
     config = function(_, opts)
-
-      vim.print(opts.ensure_installed)
-
       require("mason").setup(opts)
 
       local mr = require("mason-registry")
