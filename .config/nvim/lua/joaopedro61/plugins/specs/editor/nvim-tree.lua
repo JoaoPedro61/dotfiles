@@ -9,7 +9,7 @@ return {
       -- See configs: https://github.com/nvim-tree/nvim-tree.lua/blob/master/doc/nvim-tree-lua.txt#L380
       require("nvim-tree").setup({
         filters = {
-          dotfiles = false,
+          enable = false,
         },
         disable_netrw = true,
         hijack_netrw = true,
@@ -18,13 +18,13 @@ return {
         sync_root_with_cwd = true,
         update_focused_file = {
           enable = true,
-          update_root = false
+          update_root = false,
         },
         view = {
           adaptive_size = false,
           side = "left",
           width = 30,
-          preserve_window_proportions = true
+          preserve_window_proportions = true,
         },
         diagnostics = {
           enable = true,
@@ -47,7 +47,7 @@ return {
           root_folder_label = false,
 
           indent_markers = {
-            enable = true
+            enable = true,
           },
         },
         actions = {
@@ -56,22 +56,38 @@ return {
             restrict_above_cwd = true,
           },
           open_file = {
-            resize_window = true
-          }
-        }
+            resize_window = true,
+          },
+        },
       })
 
       local keymap = vim.keymap
       local opts = { noremap = true, silent = true }
 
-      keymap.set("n", "<leader>fe", ":NvimTreeToggle<CR>",
-        vim.tbl_deep_extend("keep", opts, { desc = "Toggle file explorer" }))
-      keymap.set("n", "<leader>fE", ":NvimTreeFindFile<CR>",
-        vim.tbl_deep_extend("keep", opts, { desc = "Open file explorer (Focus in file)" }))
-      keymap.set("n", "<leader>fo", ":NvimTreeFocus<CR>",
-        vim.tbl_deep_extend("keep", opts, { desc = "Focus on file explorer" }))
-      keymap.set("n", "<leader>fc", ":NvimTreeCollapse<CR>",
-        vim.tbl_deep_extend("keep", opts, { desc = "Collapse all folders in explorer" }))
+      keymap.set(
+        "n",
+        "<leader>fe",
+        ":NvimTreeToggle<CR>",
+        vim.tbl_deep_extend("keep", opts, { desc = "Toggle file explorer" })
+      )
+      keymap.set(
+        "n",
+        "<leader>fE",
+        ":NvimTreeFindFile<CR>",
+        vim.tbl_deep_extend("keep", opts, { desc = "Open file explorer (Focus in file)" })
+      )
+      keymap.set(
+        "n",
+        "<leader>fo",
+        ":NvimTreeFocus<CR>",
+        vim.tbl_deep_extend("keep", opts, { desc = "Focus on file explorer" })
+      )
+      keymap.set(
+        "n",
+        "<leader>fc",
+        ":NvimTreeCollapse<CR>",
+        vim.tbl_deep_extend("keep", opts, { desc = "Collapse all folders in explorer" })
+      )
     end,
   },
 }
