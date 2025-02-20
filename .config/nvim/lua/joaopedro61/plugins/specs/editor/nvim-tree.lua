@@ -23,8 +23,8 @@ return {
         view = {
           adaptive_size = false,
           side = "left",
-          width = 30,
-          preserve_window_proportions = true,
+          width = 20,
+          preserve_window_proportions = false,
         },
         diagnostics = {
           enable = true,
@@ -56,7 +56,7 @@ return {
             restrict_above_cwd = true,
           },
           open_file = {
-            resize_window = true,
+            resize_window = false,
           },
         },
       })
