@@ -10,7 +10,7 @@ return {
       })
 
       wk.add({
-        { "<leader>f",     group = "file" },
+        { "<leader>f", group = "file" },
         {
           "<leader>b",
           group = "buffers",
@@ -26,12 +26,13 @@ return {
             return require("which-key.extras").expand.win()
           end,
         },
-        { "<leader>c",     group = "code" },
-        { "<leader>u",     group = "ui" },
+        { "<leader>c", group = "code" },
+        { "<leader>e", group = "explorer" },
+        { "<leader>u", group = "ui" },
         { "<leader><tab>", group = "tabpage" },
-        { "<leader>p",     group = "plugins" },
-        { "<leader>S",     group = "settings" },
-        { "<leader>g",     group = "git" },
+        { "<leader>p", group = "plugins" },
+        { "<leader>S", group = "settings" },
+        { "<leader>g", group = "git" },
       })
     end,
   },

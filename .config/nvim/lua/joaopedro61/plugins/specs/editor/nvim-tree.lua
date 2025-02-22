@@ -66,26 +66,26 @@ return {
 
       keymap.set(
         "n",
-        "<leader>fe",
+        "<leader>e",
         ":NvimTreeToggle<CR>",
-        vim.tbl_deep_extend("keep", opts, { desc = "Toggle file explorer" })
+        vim.tbl_deep_extend("keep", opts, { desc = "Toogle explorer" })
       )
       keymap.set(
         "n",
-        "<leader>fE",
-        ":NvimTreeFindFile<CR>",
-        vim.tbl_deep_extend("keep", opts, { desc = "Open file explorer (Focus in file)" })
+        "<leader>ee",
+        ":NvimTreeToggle<CR>",
+        vim.tbl_deep_extend("keep", opts, { desc = "Toogle explorer" })
       )
       keymap.set(
         "n",
-        "<leader>fo",
+        "<leader>ef",
         ":NvimTreeFocus<CR>",
-        vim.tbl_deep_extend("keep", opts, { desc = "Focus on file explorer" })
+        vim.tbl_deep_extend("keep", opts, { desc = "Reveal in explorer" })
       )
       keymap.set(
         "n",
-        "<leader>fc",
-        ":NvimTreeCollapse<CR>",
+        "<leader>ec",
+        ":NvimTreeFocus<CR> :NvimTreeCollapse<CR>",
         vim.tbl_deep_extend("keep", opts, { desc = "Collapse all folders in explorer" })
       )
     end,
