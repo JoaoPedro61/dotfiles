@@ -27,6 +27,10 @@ return {
         },
       },
     },
+    keys = {
+      { "<Tab>", "<Cmd>BufferLineCycleNext<CR>", desc = "Next buffer/tab" },
+      { "<S-Tab>", "<Cmd>BufferLineCycleNext<CR>", desc = "Previous buffer/tab" },
+    },
     config = function(_, opts)
       if not pcall(require, "folke/snacks.nvim") then
         local close_command = function(n)
