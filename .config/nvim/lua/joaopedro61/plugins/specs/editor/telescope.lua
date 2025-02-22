@@ -15,13 +15,16 @@ return {
       "ghassan0/telescope-glyph.nvim",
       "olacin/telescope-cc.nvim",
     },
+    opts = {
+      extensions = {
+        fzf = {},
+        glyph = {}
+      }
+    },
     config = function(_, opts)
       local telescope = require("telescope")
 
       telescope.setup(opts)
-
-      telescope.load_extension("fzf")
-      telescope.load_extension("glyph")
 
       local builtin = require("telescope.builtin")
 
