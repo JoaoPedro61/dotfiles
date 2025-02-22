@@ -18,8 +18,8 @@ return {
     opts = {
       extensions = {
         fzf = {},
-        glyph = {}
-      }
+        glyph = {},
+      },
     },
     config = function(_, opts)
       local telescope = require("telescope")
