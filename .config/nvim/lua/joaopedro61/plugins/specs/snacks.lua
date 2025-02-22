@@ -19,7 +19,34 @@ return {
       words = { enabled = true },
     },
     keys = {
-      { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
-    }
-  }
+      {
+        "<leader>q",
+        function()
+          Snacks.bufdelete()
+        end,
+        desc = "Delete Buffer",
+      },
+      {
+        "<leader>bd",
+        function()
+          Snacks.bufdelete()
+        end,
+        desc = "Delete Buffer",
+      },
+      {
+        "<leader>bD",
+        function()
+          Snacks.bufdelete.all()
+        end,
+        desc = "Delete All Buffers",
+      },
+      {
+        "<leader>bo",
+        function()
+          Snacks.bufdelete.other()
+        end,
+        desc = "Delete Others Buffers",
+      },
+    },
+  },
 }

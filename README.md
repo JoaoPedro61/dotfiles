@@ -9,7 +9,7 @@ This script automates the installation and configuration of various tools and de
 - **NeoVim & Alacritty**: Installs and configures NeoVim and Alacritty terminal emulator.
 - **ZSH**: Configures ZSH as the default shell.
 - **Symlinks**: Sets up symlinks for configuration files such as NeoVim, Alacritty, and fonts.
-  
+
 ## Prerequisites
 
 This script is designed for Linux systems and should work on most distributions, but it is optimized for Ubuntu-based systems. It has specific handling for WSL (Windows Subsystem for Linux).
@@ -21,27 +21,38 @@ This script is designed for Linux systems and should work on most distributions,
 ## How to Use
 
 1. Clone repo on your system:
+
    ```bash
    git clone https://github.com/JoaoPedro61/dotfiles.git ~/.dotfiles -b v2
    ```
+
 2. Enter in the folder:
+
    ```bash
    cd ~/.dotfiles
    ```
+
 3. Make the script executable:
+
    ```bash
    chmod +x ./install
    ```
+
 4. Run the script:
+
    ```bash
    ./install
    ```
-4. Source custom env:
+
+5. Source custom env:
    Bash:
+
    ```bash
    echo '. ~/.dotfiles/user-env.bash' >> .bashrc
    ```
+
    ZSH:
+
    ```bash
    echo '. ~/.dotfiles/user-env.zsh' >> .zshrc
    ```
@@ -62,6 +73,7 @@ If the script detects that it is running inside a WSL environment, it will skip 
 ## Functions Overview
 
 ### 1. `setup_syslinks`
+
 Sets up necessary symbolic links for configuration files and directories.
 
 - **NeoVim**: Creates a symlink to the NeoVim config.
@@ -69,28 +81,37 @@ Sets up necessary symbolic links for configuration files and directories.
 - **Fonts**: Sets up symlinks for the MesloLGS font.
 
 ### 2. `install_common_dependencies`
+
 Installs a set of essential development dependencies:
+
 - `build-essential`, `curl`, `wget`, `git`, `python3`, `zsh`, `htop`, etc.
 
 ### 3. `install_rust_lang`
+
 Installs the Rust programming language using the official installer (`rustup`).
 
 ### 4. `install_lua_lang`
+
 Installs Lua (version 5.4.7) from source.
 
 ### 5. `install_luarocks`
+
 Installs LuaRocks, the package manager for Lua modules.
 
 ### 6. `install_asdf`
+
 Installs `asdf`, a version manager for various programming languages, and sets up plugins for Node.js, Ruby, Go, Elixir, and Perl.
 
 ### 7. `install_neovim`
+
 Installs NeoVim (v0.10.2) from a precompiled tarball and sets it up for Ruby and Node.js integrations.
 
 ### 8. `install_alacritty`
+
 Installs **Alacritty** terminal emulator from source (skipped if running in WSL). The script also installs the necessary completions for ZSH and Bash.
 
 ### 9. `setup_zsh`
+
 Checks if **ZSH** is installed, and if it is, sets it as the default shell.
 
 ## Customization

@@ -5,14 +5,15 @@ return {
     dependencies = {
       "folke/tokyonight.nvim",
       "yorumicolors/yorumi.nvim",
+      "sainnhe/sonokai",
       {
-        'b0o/lavi.nvim',
-        dependencies = { 'rktjmp/lush.nvim' },
+        "b0o/lavi.nvim",
+        dependencies = { "rktjmp/lush.nvim" },
       },
       {
         "xiyaowong/transparent.nvim",
         config = function()
-          require('transparent').setup({
+          require("transparent").setup({
             -- Use the telescope highlights, to find panels highlights
             extra_groups = {
               -- Native Float Popups Panels
@@ -37,32 +38,36 @@ return {
               "WhichKeyTitle",
 
               -- Bufferline Plugin Panels
-              "BufferLineOffsetSeparator"
+              "BufferLineOffsetSeparator",
             },
           })
 
           if pcall(require, "lualine") then
-            require('transparent').clear_prefix('lualine')
+            require("transparent").clear_prefix("lualine")
           end
 
           if pcall(require, "bufferline") then
-            require('transparent').clear_prefix('bufferLine')
+            require("transparent").clear_prefix("bufferLine")
           end
-        end
-      }
+        end,
+      },
     },
     config = function()
       local themery = require("themery")
       local defaultTheme = "Default Dark"
 
       themery.setup({
+        globalBefore = [[
+          vim.opt.background = "dark"
+          vim.cmd('TransparentDisable')
+
+          vim.g.sonokai_transparent_background = "0"
+          vim.g.sonokai_enable_italic = "1"
+        ]],
         themes = {
           {
             name = "Default Dark",
             colorscheme = "default",
-            before = [[
-              vim.opt.background = "dark"
-            ]],
           },
           {
             name = "Default Light",
@@ -81,36 +86,42 @@ return {
           {
             name = "Tokyonight Night",
             colorscheme = "tokyonight-night",
-            before = [[
-              vim.opt.background = "dark"
-            ]],
           },
           {
             name = "Lavi",
             colorscheme = "lavi",
-            before = [[
-              vim.opt.background = "dark"
-            ]],
           },
           {
             name = "Yorumi",
             colorscheme = "yorumi",
+          },
+          {
+            name = "Sonokai",
+            colorscheme = "sonokai",
             before = [[
-              vim.opt.background = "dark"
-            ]]
-          }
+              vim.g.sonokai_style = "andromeda"
+            ]],
+          },
+          {
+            name = "Sonokai (transparent)",
+            colorscheme = "sonokai",
+            before = [[
+              vim.g.sonokai_transparent_background = "1"
+              vim.g.sonokai_style = "andromeda"
+              vim.cmd('TransparentEnable')
+            ]],
+          },
         },
         livePreview = true,
       })
 
-      local keymap = vim.keymap;
+      local keymap = vim.keymap
 
       keymap.set("n", "<leader>ut", ":Themery<CR>", { desc = "Open theme picker" })
-      keymap.set("n", "<leader>uT", ":TransparentToggle<CR>", { desc = "Toggle transparent mode" })
 
       if pcall(themery.getCurrentTheme) and themery.getCurrentTheme() == nil then
         themery.setThemeByName(defaultTheme, true)
       end
-    end
-  }
+    end,
+  },
 }

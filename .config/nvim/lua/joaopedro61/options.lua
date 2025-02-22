@@ -17,6 +17,7 @@ local indent = 2
 opt.backspace = { "eol", "start", "indent" }
 opt.fileencoding = "utf-8"
 opt.encoding = "utf-8"
+vim.scriptenconding = "utf-8"
 opt.matchpairs = { "(:)", "{:}", "[:]", "<:>" }
 opt.syntax = "enable"
 opt.cmdheight = 0

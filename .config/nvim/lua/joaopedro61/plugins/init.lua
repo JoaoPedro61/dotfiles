@@ -15,7 +15,7 @@ require("lazy").setup({
   },
   install = {
     missing = true,
-    colorscheme = { settings.safe_get("colorscheme", "default") },
+    colorscheme = { settings.safe_get("colorscheme.name", "default") },
   },
   checker = {
     enabled = true,

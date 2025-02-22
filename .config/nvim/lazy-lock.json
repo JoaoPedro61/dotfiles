@@ -32,6 +32,7 @@
   "plenary.nvim": { "branch": "master", "commit": "3707cdb1e43f5cea73afb6037e6494e7ce847a66" },
   "rustaceanvim": { "branch": "master", "commit": "af621beb7afa662294627d41f8184875e8942ce1" },
   "snacks.nvim": { "branch": "main", "commit": "c2310c6d1ecb4d5fad701ed0aeb92adc2f0db385" },
+  "sonokai": { "branch": "master", "commit": "450e11a4098510bf7e1125136a366f34ac671f5a" },
   "symbols-outline.nvim": { "branch": "master", "commit": "564ee65dfc9024bdde73a6621820866987cbb256" },
   "telescope-cc.nvim": { "branch": "main", "commit": "c3cf3489178f945e3efdf0bd15bfb8c353279755" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "dae2eac9d91464448b584c7949a31df8faefec56" },
@@ -39,7 +40,6 @@
   "telescope.nvim": { "branch": "master", "commit": "415af52339215926d705cccc08145f3782c4d132" },
   "themery.nvim": { "branch": "main", "commit": "bfa58f4b279d21cb515b28023e1b68ec908584b2" },
   "tokyonight.nvim": { "branch": "main", "commit": "dca4adba7dc5f09302a00b0e76078d54d82d2658" },
-  "transparent.nvim": { "branch": "main", "commit": "8a2749a2fa74f97fe6557f61b89ac7fd873f3c21" },
   "which-key.nvim": { "branch": "main", "commit": "0e76a87ac51772569aec678dc74baa8e2a86100c" },
   "yorumi.nvim": { "branch": "main", "commit": "0d0c995ecb90cd21e701fd30b7c5e794cb1e41ce" }
 }

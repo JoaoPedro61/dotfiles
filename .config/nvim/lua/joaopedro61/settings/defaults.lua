@@ -18,12 +18,22 @@
 --- @field enable? (boolean) Optional setting to enable or disable auto format in LSP.
 --- @field exclude? (string[]) Optional string array to disable auto format in some file types
 ---
+--- @class joaopedro61.Settings.Colorscheme
+--- A table representing Colorscheme settings.
+--- @field name? (string) The colorscheme name
+--- @field variant? (string) The colorscheme variant. Ex.: transparent
+---
 --- @class joaopedro61.Settings
 --- A table representing the user settings.
+--- @field colorscheme? (joaopedro61.Settings.Colorscheme) Optional settings for colorscheme settings.
 --- @field auto_format? (joaopedro61.Settings.AutoFormat) Optional setting for auto-formatting behavior (default is false).
 --- @field lsp? (joaopedro61.Settings.Lsp) Optional LSP settings (default is empty).
 
 local default_settings = {
+  colorscheme = {
+    name = "sonokai",
+    variant = "transparent",
+  },
   auto_format = {
     enable = false,
     exclude = {},
