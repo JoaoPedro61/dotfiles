@@ -33,6 +33,7 @@ return {
         { "<leader>p", group = "plugins" },
         { "<leader>S", group = "settings" },
         { "<leader>g", group = "git" },
+        { "<leader>n", group = "notification" },
       })
     end,
   },

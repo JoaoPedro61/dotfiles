@@ -21,7 +21,8 @@ return {
       vim.notify = notify
 
       if Plugin.has("telescope.nvim") then
-        vim.keymap.set("n", "<leader>fn", ":Telescope notify<CR>", { desc = "Telescope notification history" })
+        vim.keymap.set("n", "<leader>nh", ":Telescope notify<CR>", { desc = "Show notification history" })
+        vim.keymap.set("n", "<leader>nc", ":NotificationClear<CR>", { desc = "Clear notification history" })
       end
     end,
   },

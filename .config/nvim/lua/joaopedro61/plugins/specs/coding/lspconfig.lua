@@ -19,7 +19,6 @@ return {
     },
     opts = {
       keys = {
-        { "<leader>cL", "<cmd>LspInfo<cr>", desc = "Lsp Info" },
         {
           "gd",
           vim.lsp.buf.definition,
@@ -36,26 +35,11 @@ return {
         { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
         { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
         {
-          "K",
-          function()
-            return vim.lsp.buf.hover()
-          end,
-          desc = "Hover",
-        },
-        {
-          "gK",
+          "<C-k>",
           function()
             return vim.lsp.buf.signature_help()
           end,
-          desc = "Signature Help",
-          has = "signatureHelp",
-        },
-        {
-          "<c-k>",
-          function()
-            return vim.lsp.buf.signature_help()
-          end,
-          mode = "i",
+          mode = { "i", "n" },
           desc = "Signature Help",
           has = "signatureHelp",
         },
@@ -65,6 +49,22 @@ return {
           desc = "Code Action",
           mode = { "n", "v" },
           has = "codeAction",
+        },
+        {
+          "<leader>cA",
+          lsp.action.source,
+          desc = "Source Action",
+          has = "codeAction",
+        },
+
+        -- Inlay actions that no need selection
+        { "<leader>cL", "<cmd>LspInfo<cr>", desc = "Lsp Info" },
+        {
+          "K",
+          function()
+            return vim.lsp.buf.hover()
+          end,
+          desc = "Hover",
         },
         {
           "<leader>cl",
@@ -94,12 +94,6 @@ return {
           vim.lsp.buf.rename,
           desc = "Rename",
           has = "rename",
-        },
-        {
-          "<leader>cA",
-          lsp.action.source,
-          desc = "Source Action",
-          has = "codeAction",
         },
         {
           "]]",
