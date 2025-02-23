@@ -8,10 +8,15 @@
 --- @field enable? (boolean) Optional setting to enable or disable codelens in LSP.
 --- @field exclude? (string[]) Optional string array to disable codelens in some file types
 ---
+--- @class joaopedro61.Settings.Lsp.Diagnostics
+--- A table representing LSP Diagnostics settings
+--- @field enable? (boolean) Optional setting to enable or disable diagnostics in LSP
+---
 --- @class joaopedro61.Settings.Lsp
 --- A table representing LSP settings.
 --- @field inlay_hint? (joaopedro61.Settings.Lsp.InlayHints) Optional setting to enable or disable inlay hints in LSP.
 --- @field codelens? (joaopedro61.Settings.Lsp.Codelens) Optional setting to enable or disable codelens in LSP.
+--- @field diagnostics? (joaopedro61.Settings.Lsp.Diagnostics) Optional setting to enable os disable diagnostics in LSP.
 ---
 --- @class joaopedro61.Settings.AutoFormat
 --- A table representing AutoFormat settings.
@@ -46,6 +51,9 @@ local default_settings = {
     codelens = {
       enable = true,
       exclude = {},
+    },
+    diagnostics = {
+      enable = true,
     },
   },
 } --- @type joaopedro61.Settings

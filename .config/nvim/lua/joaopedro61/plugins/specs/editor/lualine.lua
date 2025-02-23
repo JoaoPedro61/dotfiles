@@ -1,4 +1,5 @@
 local ui = require("joaopedro61.util.ui")
+local settings = require("joaopedro61.settings")
 
 return {
   {
@@ -159,7 +160,6 @@ return {
 
       ins_left({
         "diagnostics",
-        sources = { "nvim_diagnostic", "nvim_lsp" },
         symbols = {
           error = ui.icons.error,
           warn = ui.icons.warn,
