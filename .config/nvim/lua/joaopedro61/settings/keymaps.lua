@@ -19,5 +19,11 @@ map("n", "<leader>Sfe", function()
   )
 end, merge(opts, { desc = "Toggle auto format" }))
 
+map("n", "<leader>Ss", function ()
+  vim.print(
+    require("joaopedro61.settings").data
+  )
+end, merge(opts, { desc = "Show current settings" }))
+
 -- LSP settings
 -- Add more keymapings bellow
