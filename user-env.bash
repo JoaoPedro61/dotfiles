@@ -30,3 +30,5 @@ fi
 if [ -f $HOME/.bash_completion/alacritty ]; then
   source $HOME/.bash_completion/alacritty
 fi
+
+alias tm="tmux attach || tmux"
