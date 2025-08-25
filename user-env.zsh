@@ -37,3 +37,5 @@ fi
 if [ -f $HOME/.zsh_functions/_alacritty ]; then
   # Do nothing
 fi
+
+alias tm="tmux attach || tmux"

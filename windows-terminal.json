@@ -1,0 +1,79 @@
+{
+  "$help": "https://aka.ms/terminal-documentation",
+  "$schema": "https://aka.ms/terminal-profiles-schema",
+  "centerOnLaunch": true,
+  "copyFormatting": "none",
+  "copyOnSelect": false,
+  "newTabMenu": [
+    {
+      "type": "remainingProfiles"
+    }
+  ],
+  "showTabsInTitlebar": true,
+  "showTerminalTitleInTitlebar": false,
+  "tabWidthMode": "compact",
+  "snapToGridOnResize": true,
+  "compatibility.enableUnfocusedAcrylic": true,
+  "useAcrylicInTabRow": true,
+  "theme": "Full Acrylic",
+  "themes": [
+    {
+      "name": "Full Dark",
+      "tab": {
+        "background": "#000000",
+        "iconStyle": "default",
+        "showCloseButton": "always",
+        "unfocusedBackground": "#000000"
+      },
+      "tabRow": {
+        "background": "#000000",
+        "unfocusedBackground": "#000000"
+      },
+      "window": {
+        "applicationTheme": "dark",
+        "experimental.rainbowFrame": false,
+        "frame": null,
+        "unfocusedFrame": null,
+        "useMica": false
+      }
+    },
+    {
+      "name": "Full Acrylic",
+      "tab": {
+        "background": "terminalBackground",
+        "iconStyle": "default",
+        "showCloseButton": "never",
+        "unfocusedBackground": "terminalBackground"
+      },
+      "tabRow": {
+        "background": "terminalBackground",
+        "unfocusedBackground": "terminalBackground"
+      },
+      "window": {
+        "applicationTheme": "dark",
+        "experimental.rainbowFrame": false,
+        "frame": null,
+        "unfocusedFrame": null,
+        "useMica": false
+      }
+    }
+  ],
+  "profiles": {
+    "defaults": {
+      "colorScheme": "CGA",
+      "cursorShape": "filledBox",
+      "font": {
+        "cellHeight": "1.1",
+        "face": "MesloLGS NF"
+      },
+      "opacity": 80,
+      "padding": "0",
+      "scrollbarState": "hidden",
+      "suppressApplicationTitle": true,
+      "tabTitle": "~",
+      "useAcrylic": true,
+      "adjustIndistinguishableColors": "always",
+      "intenseTextStyle": "bold"
+    }
+  }
+}
