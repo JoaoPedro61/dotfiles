@@ -1,5 +1,4 @@
 local ui = require("joaopedro61.util.ui")
-local settings = require("joaopedro61.settings")
 
 return {
   {
@@ -70,27 +69,10 @@ return {
         end,
       }
 
-      local colors = {
-        fg = {
-          dark = "#bbc2cf",
-          light = "#27273b",
-        },
-        yellow = "#ECBE7B",
-        cyan = "#008080",
-        darkblue = "#081633",
-        green = "#98be65",
-        orange = "#FF8800",
-        violet = "#a9a1e1",
-        magenta = "#c678dd",
-        blue = "#51afef",
-        red = "#ec5f67",
-      }
+      local colors = ui.colors
 
       local with_fg_based = function(based_opts)
-        return function()
-          local fg = colors.fg[vim.opt.background:get() or "dark"]
-          return vim.tbl_deep_extend("keep", { fg = fg }, based_opts or {})
-        end
+        return ui.colors.foreground(based_opts)
       end
 
       -- Inserts a component in lualine_c at left section
