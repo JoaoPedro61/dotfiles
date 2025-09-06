@@ -20,41 +20,53 @@ This script is designed for Linux systems and should work on most distributions,
 
 ## How to Use
 
-1. Clone repo on your system:
+1. Update your local headers packages files:
 
    ```bash
-   git clone https://github.com/JoaoPedro61/dotfiles.git ~/.dotfiles -b v2
+   apt update
+   ```
+   ```bash
+   apt upgrade
+   ```
+   ```bash
+   apt autoremove
    ```
 
-2. Enter in the folder:
+2. Clone repo on your system:
+
+   ```bash
+   git clone https://github.com/JoaoPedro61/dotfiles.git ~/.dotfiles -b main
+   ```
+
+3. Enter in the folder:
 
    ```bash
    cd ~/.dotfiles
    ```
 
-3. Make the script executable:
+4. Make the script executable:
 
    ```bash
    chmod +x ./install
    ```
 
-4. Run the script:
+5. Run the script:
 
    ```bash
    ./install
    ```
 
-5. Source custom env:
+6. Source custom env:
    Bash:
 
    ```bash
-   echo '. ~/.dotfiles/user-env.bash' >> .bashrc
+   cd $HOME && echo '. ~/.dotfiles/user-env.bash' >> .bashrc
    ```
 
    ZSH:
 
    ```bash
-   echo '. ~/.dotfiles/user-env.zsh' >> .zshrc
+   cd $HOME && echo '. ~/.dotfiles/user-env.zsh' >> .zshrc
    ```
 
 The script will:
