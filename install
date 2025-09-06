@@ -31,6 +31,11 @@ function ensure_dir() {
   fi
 }
 
+function self_source() {
+  log "Sourcing bash env"
+  . "$script_dir/user-env.bash"
+}
+
 # Helper function to remove a file or directory if it exists
 function remove_if_exists() {
   local path=$1
@@ -110,6 +115,8 @@ function install_rust_lang() {
     exit 1
   }
   log "Rust installed"
+
+  self_source
 }
 
 # Install Lua
@@ -130,6 +137,8 @@ function install_lua_lang() {
     exit 1
   }
   log "Lua installed"
+
+  self_source
 }
 
 # Install LuaRocks plugin
@@ -139,6 +148,8 @@ function install_luarocks_plugin() {
     log "Failed to install LuaRocks plugin $1"
     exit 1
   }
+
+  self_source
 }
 
 # Install LuaRocks
@@ -160,7 +171,11 @@ function install_luarocks() {
   }
   log "LuaRocks installed"
 
+  self_source
+
   install_luarocks_plugin jsregexp
+
+  self_source
 }
 
 # Install asdf plugin
@@ -179,6 +194,8 @@ function install_asdf_plugin() {
     exit 1
   }
   log "asdf plugin $1 installed"
+
+  self_source
 }
 
 # Install asdf
@@ -196,6 +213,9 @@ function install_asdf() {
     log "Skipping asdf installation (already installed)"
   fi
   source "$dest_path/asdf.sh"
+
+  self_source
+
   log "asdf installed"
   install_asdf_plugin nodejs https://github.com/asdf-vm/asdf-nodejs.git latest
   install_asdf_plugin ruby https://github.com/asdf-vm/asdf-ruby.git latest
@@ -206,9 +226,11 @@ function install_asdf() {
 
 # Install NeoVim
 function install_neovim() {
+  self_source
+
   log "Installing NeoVim:"
-  local version="v0.10.2"
-  local file_name="nvim-linux64"
+  local version="v0.11.4"
+  local file_name="nvim-linux-x86_64"
   local dest_path="$HOME/.nvim"
   local url="https://github.com/neovim/neovim/releases/download/$version/$file_name.tar.gz"
   gem install neovim || {
@@ -237,6 +259,8 @@ function install_neovim() {
   }
   export PATH="$PATH:$dest_path/bin"
   log "NeoVim installed"
+
+  self_source
 }
 
 # Install Alacritty
