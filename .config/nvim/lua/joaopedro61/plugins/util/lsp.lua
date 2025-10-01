@@ -265,11 +265,11 @@ end
 --- Creates a formatter object with options for formatting.
 --- This function creates a formatter with LSP as the default formatter.
 --- The resulting formatter object can be used to format buffers and get LSP client names that support formatting.
---- 
+---
 --- @param opts? (joaopedro61.Plugins.Util.Format.Formatter | { filter?: (string|lsp.Client.filter) }) Options for the formatter.
 --- If a `filter` is provided, it will be used to filter the LSP clients.
 --- @return (joaopedro61.Plugins.Util.Format.Formatter) The created formatter object.
---- 
+---
 --- @see M.format for the function that formats the buffer.
 function M.formatter(opts)
   opts = opts or {}
@@ -444,7 +444,7 @@ function Servers.get_servers_to_install(servers)
 
   local have_mason, _ = pcall(require, "mason-lspconfig")
   if have_mason then
-    all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
+    all_mslp_servers = vim.tbl_keys(require("mason-lspconfig").get_mappings().lspconfig_to_package)
   end
 
   local mason_servers = {} ---@type string[]

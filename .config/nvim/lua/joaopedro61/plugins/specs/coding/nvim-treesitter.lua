@@ -1,7 +1,8 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    lazy = true,
+    branch = "master",
+    lazy = false,
     build = ":TSInstall",
     event = "BufRead",
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
